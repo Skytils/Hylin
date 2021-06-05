@@ -73,7 +73,7 @@ fun scan(uuid: UUID) {
 }
 scan("cab60d114bd84d5fbcc46383ee8f6ed1".toUUID())
 ```
-KoPixel currently supports a portion of the skyblock API and regular player API, although status, guild, auction, bazaar, and dungeon implementations are planned for the near future.
+KoPixel currently supports a large portion of the skyblock API and regular player API, although resource, auction, bazaar, and dungeon implementations are planned for the near future.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
