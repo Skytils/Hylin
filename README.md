@@ -1,7 +1,7 @@
 # KoPixel
 Simple &amp; flexible asynchronous Hypixel API for Kotlin
 # KoPixel
-[![](https://jitpack.io/v/ryanhcode/KoPixel.svg)](https://jitpack.io/#ryanhcode/KoPixel) ![JitPack](https://img.shields.io/jitpack/v/github/ryanhcode/KoPixel)
+[![](https://jitpack.io/v/ryanhcode/KoPixel.svg)](https://jitpack.io/#ryanhcode/KoPixel)
 
 KoPixel is a simple &amp; flexible asynchronous Hypixel API for Kotlin
 
