@@ -12,6 +12,20 @@ plugins {
 
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
+
+    id 'maven-publish'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.ryanhcode.kopixel'
+            artifactId = 'library'
+            version = '0.1'
+
+            from components.java
+        }
+    }
 }
 
 repositories {
