@@ -17,4 +17,5 @@ class JsonObjectTest {
 
         assertEquals(obj.path("foo/bar").getString("name"), "baz")
     }
+
 }

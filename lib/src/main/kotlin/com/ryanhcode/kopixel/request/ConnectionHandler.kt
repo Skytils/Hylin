@@ -50,7 +50,7 @@ class ConnectionHandler {
     fun hypixelJSON(endpoint: String): JsonObject {
         val readJSON = readJSON(endpoint)
         if(!readJSON.getBoolean("success")) {
-            throw HypixelAPIException(endpoint, readJSON.getString("error"))
+            throw HypixelAPIException(endpoint, readJSON.getString("cause"))
         }
         return readJSON
     }

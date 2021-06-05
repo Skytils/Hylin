@@ -6,11 +6,8 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import com.ryanhcode.kopixel.util.Queue
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
-class KoPixelAPITest() {
+class KoPixelAPITest {
 
     val testKey = "redacted"
 
@@ -50,7 +47,18 @@ class KoPixelAPITest() {
             } }
         }
         scan("cab60d114bd84d5fbcc46383ee8f6ed1".toUUID())
+    }
 
+    @Test
+    fun status() {
+        val api = NewKoPixelAPI(testKey)
 
+        println(api.statusSync("skyf"))
+    }
+
+    @Test
+    fun guildTest() {
+        val api = NewKoPixelAPI(testKey)
+        assertEquals(api.guildSync("skyf"), null)
     }
 }
