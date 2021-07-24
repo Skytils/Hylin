@@ -1,9 +1,10 @@
 package skytils.kopixel.skyblock.item
 
 import com.google.gson.JsonObject
+import net.minecraft.nbt.CompressedStreamTools
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.Constants
 import skytils.kopixel.extension.*
-import net.querz.nbt.io.NBTDeserializer
-import net.querz.nbt.tag.CompoundTag
 import java.io.ByteArrayInputStream
 import java.util.*
 
@@ -19,14 +20,15 @@ class Inventory(val name: String, var items: MutableList<InventoryItem> = mutabl
         val bytes = data.toByteArray(charset("UTF-8"))
         val decodedBytes = Base64.getDecoder().decode(bytes)
 
-        val rawTag = NBTDeserializer().fromStream(ByteArrayInputStream(decodedBytes))
-        val tag = rawTag.tag as CompoundTag
+        val tag = CompressedStreamTools.readCompressed(ByteArrayInputStream(decodedBytes))
 
         // Iterate through every item
-        tag.getListTag("i").forEach {
-            (it as CompoundTag).forEach { item ->
-                item.value?.let { itTag->
-                    if(itTag is CompoundTag) items.add(InventoryItem(itTag))
+        val list = tag.getTagList("i", Constants.NBT.TAG_COMPOUND)
+        for (i in 0 until list.tagCount()) {
+            val cmpndTag = list.getCompoundTagAt(i)
+            cmpndTag.keySet.forEach { item ->
+                cmpndTag.getTag(item)?.let { itTag->
+                    if(itTag is NBTTagCompound) items.add(InventoryItem(itTag))
                 }
             }
         }
@@ -36,14 +38,8 @@ class Inventory(val name: String, var items: MutableList<InventoryItem> = mutabl
         return "Inventory(name=$name,items=$items)"
     }
 
-    inline fun forEveryItem(backpacks: Boolean = true, iterator: (InventoryItem) -> Unit) {
+    inline fun forEveryItem(iterator: (InventoryItem) -> Unit) {
         items.forEach {
-            iterator(it)
-            if(backpacks && it.isBackpack()) forEveryBackpackItem(it, iterator)
-        }
-    }
-    inline fun forEveryBackpackItem(backpack: InventoryItem, iterator: (InventoryItem) -> Unit) {
-        backpack.backpackContents().items.forEach {
             iterator(it)
         }
     }

@@ -1,53 +1,25 @@
 package skytils.kopixel.skyblock.item
 
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.Constants
 import skytils.kopixel.skyblock.SkyblockColors
-import net.querz.nbt.io.NBTDeserializer
-import net.querz.nbt.tag.ByteArrayTag
-import net.querz.nbt.tag.CompoundTag
-import java.io.ByteArrayInputStream
 
-class InventoryItem(val tag: CompoundTag) {
-    fun isBackpack(): Boolean {
-        tag.getCompoundTag("ExtraAttributes")?.let { attribute ->
-            attribute.entrySet().forEach {
-                if("_backpack_data" in it.key) return true
-            }
-        }
-        return false
-    }
-
-    fun backpackContents(): Inventory {
-        tag.getCompoundTag("ExtraAttributes")?.let { attribute ->
-            val items = mutableListOf<InventoryItem>()
-            attribute.entrySet().forEach {
-                if("_backpack_data" in it.key) {
-                    val byt = (it.value as ByteArrayTag).value
-                    val rawTag = NBTDeserializer().fromStream(ByteArrayInputStream(byt))
-                    val tag = rawTag.tag as CompoundTag
-                    items += InventoryItem(tag)
-                }
-            }
-            return Inventory("backpack", items)
-        }
-        error("This item is not a backpack")
-    }
-
-    override fun toString() = "Item(${tag.toString()})"
+class InventoryItem(val tag: NBTTagCompound) {
+    override fun toString() = "Item($tag)"
 
     fun colorable(): Boolean {
-        tag.getCompoundTag("display")?.let { it.getIntTag("color")?.let { colorTag -> return true } }
-        return false
+        return tag.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT)
     }
     fun color(): Int? {
-        tag.getCompoundTag("display")?.let { it.getIntTag("color")?.let { colorTag -> return colorTag.asInt() } }
+        val displayTag = tag.getCompoundTag("display")
+        if (displayTag.hasKey("color", Constants.NBT.TAG_INT)) {
+            return displayTag.getInteger("color")
+        }
         return null
     }
     fun id(): String? {
         tag.getCompoundTag("ExtraAttributes")?.let {
-            it.getStringTag("id")?.let { idTag ->
-                val id = idTag.value.lowercase()
-                return id
-            }
+            if (it.hasKey("id", Constants.NBT.TAG_STRING)) return it.getString("id")
         }
         return null
     }

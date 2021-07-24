@@ -2,13 +2,14 @@ plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
 
+    // Add ForgeGradle to get Minecraft Classes
+    id "net.minecraftforge.gradle.forge" version "6f5327"
+
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
 
     id 'maven-publish'
 }
-
-ext.kotlin_version = "1.5.21"
 
 publishing {
     publications {
@@ -30,28 +31,29 @@ repositories {
 
 dependencies {
     // Align versions of all Kotlin components
-    implementation platform("org.jetbrains.kotlin:kotlin-bom:$kotlin_version")
+    implementation platform("org.jetbrains.kotlin:kotlin-bom")
 
     // Use the Kotlin JDK 8 standard library.
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation "com.google.guava:guava:30.0-jre"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     // Use the Kotlin test library.
-    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
 
     // Use the Kotlin JUnit integration.
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
 
-    // GSON to be used for JSON serialization/deserialization
-    implementation 'com.google.code.gson:gson:2.8.7'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1-native-mt"
-    implementation 'com.github.Querz:NBT:5.2'
+}
+
+minecraft {
+    version = "1.8.9-11.15.1.2318-1.8.9"
+    runDir = "run"
+    mappings = "stable_22"
+    gitVersion = false
 }
 
 java {

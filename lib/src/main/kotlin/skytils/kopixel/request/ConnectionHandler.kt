@@ -4,12 +4,9 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
-import skytils.kopixel.KoPixelAPI
 import skytils.kopixel.extension.getBoolean
 import skytils.kopixel.extension.getString
 import java.net.URL
-import kotlin.system.measureTimeMillis
-import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.Reader
 import java.net.HttpURLConnection
@@ -20,6 +17,8 @@ import java.util.zip.GZIPInputStream
  * Handler for API connections and reading JSON
  */
 class ConnectionHandler {
+
+    val parser = JsonParser()
 
     /**
      * Reads an endpoint and parses as JSON
@@ -38,8 +37,7 @@ class ConnectionHandler {
         }
 
         try {
-            val parsed = JsonParser.parseReader(reader).asJsonObject
-            return parsed
+            return parser.parse(reader).asJsonObject
         } catch (e: JsonParseException) {
             error("Error caught during JSON parsing from \"${skytils.kopixel.KoPixelAPI.endpoint}/$endpoint\"")
         } catch (e: JsonSyntaxException) {

@@ -24,7 +24,7 @@ class Profile(json: JsonObject) {
     inline fun scan(crossinline iterator: (uuid: UUID, member: Member, inv: Inventory, item: InventoryItem) -> Unit) {
         members.forEach { uuid, member ->
             member.inventories.forEach { inv ->
-                inv.forEveryItem(backpacks = true) { item ->
+                inv.forEveryItem { item ->
                     iterator(uuid.toUUID(), member, inv, item)
                 }
             }
