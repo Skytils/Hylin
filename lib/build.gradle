@@ -19,7 +19,7 @@ plugins {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'com.ryanhcode.kopixel'
+            groupId = 'skytils.kopixel'
             artifactId = 'library'
             version = '0.1'
 
