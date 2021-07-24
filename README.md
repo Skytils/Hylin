@@ -9,10 +9,10 @@ Add the following to your build.gradle(.kts)
 
 ```groovy
 dependencies {
-    implementation 'com.github.ryanhcode:KoPixel:$kopixel_version'
+    implementation 'com.github.Skytils:KoPixel:$kopixel_version'
 }
 ```
-Or visit Jitpack and [select a version](https://jitpack.io/#ryanhcode/KoPixel/latest) 
+Or visit Jitpack and [select a version](https://jitpack.io/#Skytils/KoPixel/latest) 
 
 ## Usage
 
@@ -73,5 +73,10 @@ scan("cab60d114bd84d5fbcc46383ee8f6ed1".toUUID())
 ```
 KoPixel currently supports a large portion of the skyblock API and regular player API, although resource, auction, bazaar, and dungeon implementations are planned for the near future.
 
-## License
+##License
+[GNU AGPL 3.0](https://github.com/Skytils/KoPixel/blob/master/LICENSE.md)
+
+## Original Project & License
+[ryanhcode's KoPixel](https://github.com/ryanhcode/KoPixel)
+
 [MIT](https://choosealicense.com/licenses/mit/)
