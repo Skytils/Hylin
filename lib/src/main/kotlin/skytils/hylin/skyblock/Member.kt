@@ -95,7 +95,8 @@ class Member(val json: JsonObject) {
                 "\tarmor=$armor, \n" +
                 "\twardrobe=$wardrobe, \n" +
                 "\tvault=$vault, \n" +
-                "\tstorage=$storage\n" +
+                "\tstorage=$storage, \n" +
+                "\tgriffin=$griffin\n" +
                 ")"
     }
 

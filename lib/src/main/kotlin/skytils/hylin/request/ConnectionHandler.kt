@@ -49,9 +49,9 @@ class ConnectionHandler {
         val con: HttpURLConnection = url.openConnection() as HttpURLConnection
         con.setRequestProperty("Accept-Encoding", "gzip")
         val reader: Reader = if ("gzip" == con.contentEncoding) {
-            InputStreamReader(GZIPInputStream(con.inputStream))
+            InputStreamReader(GZIPInputStream(con.inputStream), Charsets.UTF_8)
         } else {
-            InputStreamReader(con.inputStream)
+            InputStreamReader(con.inputStream, Charsets.UTF_8)
         }
 
         try {
