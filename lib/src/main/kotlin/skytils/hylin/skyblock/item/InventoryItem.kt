@@ -25,31 +25,32 @@ import skytils.hylin.skyblock.SkyblockColors
 class InventoryItem(val tag: NBTTagCompound) {
     override fun toString() = "Item($tag)"
 
-    fun colorable(): Boolean {
-        return tag.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT)
-    }
+    val colorable
+        get() = tag.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT)
 
-    fun color(): Int? {
-        val displayTag = tag.getCompoundTag("display")
-        if (displayTag.hasKey("color", Constants.NBT.TAG_INT)) {
-            return displayTag.getInteger("color")
+    val color: Int?
+        get() {
+            val displayTag = tag.getCompoundTag("display")
+            if (displayTag.hasKey("color", Constants.NBT.TAG_INT)) {
+                return displayTag.getInteger("color")
+            }
+            return null
         }
-        return null
-    }
 
-    fun id(): String? {
-        tag.getCompoundTag("ExtraAttributes")?.let {
-            if (it.hasKey("id", Constants.NBT.TAG_STRING)) return it.getString("id")
+    val id: String?
+        get() {
+            tag.getCompoundTag("ExtraAttributes")?.let {
+                if (it.hasKey("id", Constants.NBT.TAG_STRING)) return it.getString("id")
+            }
+            return null
         }
-        return null
-    }
 
-    fun hexColor() = Integer.toHexString(color()!!)
+    val hexColor: String
+        get() = Integer.toHexString(color!!)
 
-    fun exotic() = try {
-        SkyblockColors.isExotic(id()!!, color()!!)
-    } catch (e: Exception) {
-        false
-    }
+    val isExotic
+        get() = runCatching {
+            SkyblockColors.isExotic(id!!, color!!)
+        }.getOrDefault(false)
 
 }

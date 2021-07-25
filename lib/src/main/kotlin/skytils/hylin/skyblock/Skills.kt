@@ -26,16 +26,16 @@ import skytils.hylin.extension.getFloat
  * @param json A JsonObject to construct data from
  */
 class Skills(private val json: JsonObject) {
-    val miningXP = skill("mining")
-    val combatXP = skill("combat")
-    val foragingXP = skill("foraging")
-    val tamingXP = skill("taming")
-    val alchemyXP = skill("alchemy")
-    val farmingXP = skill("farming")
-    val enchantingXP = skill("enchanting")
-    val fishingXP = skill("fishing")
-    val carpentryXP = skill("carpentry")
-    val runecraftingXP = skill("runecrafting")
+    val miningXP by lazy { skill("mining") }
+    val combatXP by lazy { skill("combat") }
+    val foragingXP by lazy { skill("foraging") }
+    val tamingXP by lazy { skill("taming") }
+    val alchemyXP by lazy { skill("alchemy") }
+    val farmingXP by lazy { skill("farming") }
+    val enchantingXP by lazy { skill("enchanting") }
+    val fishingXP by lazy { skill("fishing") }
+    val carpentryXP by lazy { skill("carpentry") }
+    val runecraftingXP by lazy { skill("runecrafting") }
 
     fun skill(s: String): Float? = if (json.has("experience_skill_$s")) json.getFloat("experience_skill_$s") else null
 }

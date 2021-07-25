@@ -60,8 +60,8 @@ class HylinAPITest {
             api.getSkyblockProfiles(uuid).whenComplete { profiles ->
                 profiles.forEach { profile ->
                     profile.scan { uuid, member, inv, item ->
-                        if (item.colorable() && item.exotic())
-                            println("Exotic Found: \n\t${item.id()} \n\t${item.hexColor()} \n\t$uuid \n\t${inv.name}")
+                        if (item.colorable && item.isExotic)
+                            println("Exotic Found: \n\t${item.id} \n\t${item.hexColor} \n\t$uuid \n\t${inv.name}")
                     }
                 }
             }

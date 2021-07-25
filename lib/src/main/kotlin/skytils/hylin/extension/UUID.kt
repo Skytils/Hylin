@@ -37,3 +37,7 @@ fun String.toUUID(): UUID {
         error("Invalid UUID")
     }
 }
+
+fun UUID.nonDashedString(): String {
+    return this.toString().replace("-", "")
+}

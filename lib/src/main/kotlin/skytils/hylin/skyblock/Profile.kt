@@ -39,7 +39,7 @@ class Profile(json: JsonObject) {
     val banking: Banking? by json.byExternal<Banking>()
 
     inline fun scan(crossinline iterator: (uuid: UUID, member: Member, inv: Inventory, item: InventoryItem) -> Unit) {
-        members.forEach { uuid, member ->
+        members.forEach { (uuid, member) ->
             member.inventories.forEach { inv ->
                 inv.forEveryItem { item ->
                     iterator(uuid.toUUID(), member, inv, item)

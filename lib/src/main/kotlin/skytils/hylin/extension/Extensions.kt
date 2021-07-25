@@ -18,6 +18,7 @@
 
 package skytils.hylin.extension
 
+import skytils.hylin.skyblock.Member
 import skytils.hylin.skyblock.Profile
 import java.util.*
 
@@ -26,8 +27,9 @@ import java.util.*
  * @param uuid The uuid of the player
  * @return The last played Skyblock profile of the player
  */
-fun List<Profile>.getLatestProfileOrNull(uuid: UUID): Profile? {
+fun List<Profile>.getLatestProfileForMemberOrNull(uuid: UUID): Member? {
+    val uuidString = uuid.nonDashedString()
     return this.maxByOrNull {
-        it.members[uuid.toString().replace("-", "")]?.lastSave?.time ?: 0L
-    }
+        it.members[uuidString]?.lastSave?.time ?: 0L
+    }?.members?.get(uuidString)
 }
