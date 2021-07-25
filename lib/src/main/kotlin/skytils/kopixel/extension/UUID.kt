@@ -1,7 +1,7 @@
 package skytils.kopixel.extension
 
 import java.math.BigInteger
-import java.util.UUID
+import java.util.*
 
 /**
  * Convert this String to a UUID

@@ -5,7 +5,7 @@ import skytils.kopixel.extension.converter.byExternal
 import skytils.kopixel.extension.converter.byUUID
 
 class OnlineStatus(json: JsonObject) {
-    val uuid    by json.byUUID()
+    val uuid by json.byUUID()
     val session by json.byExternal<PlayerSession>()
 
     override fun toString(): String {

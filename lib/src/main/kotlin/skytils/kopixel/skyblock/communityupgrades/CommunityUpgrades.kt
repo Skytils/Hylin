@@ -10,7 +10,7 @@ import skytils.kopixel.extension.getJsonObject
  */
 class CommunityUpgrades(json: JsonObject) {
     val currentCommunityUpgrade: CurrentCommunityUpgrade? =
-        if(json.has("currently_upgrading") && !json.get("currently_upgrading").isJsonNull)
+        if (json.has("currently_upgrading") && !json.get("currently_upgrading").isJsonNull)
             CurrentCommunityUpgrade(json.getJsonObject("currently_upgrading"))
         else
             null

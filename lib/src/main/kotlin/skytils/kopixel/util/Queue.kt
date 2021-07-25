@@ -7,7 +7,7 @@ class Queue<T> {
 
     /* Returns and removes the next job off of the queue. Always returns at index 0 */
     fun next(): T {
-        if(!hasJob()) error("There are no jobs to be returned.")
+        if (!hasJob()) error("There are no jobs to be returned.")
         return queue.removeFirst()
     }
 
@@ -19,10 +19,13 @@ class Queue<T> {
 
     /* Add a job to the queue */
     fun add(job: T) {
-        if(queue.contains(job)) return
+        if (queue.contains(job)) return
         queue.add(job)
     }
-    operator fun plusAssign(job: T) { add(job) }
+
+    operator fun plusAssign(job: T) {
+        add(job)
+    }
 
     /* Clears all jobs from the queue */
     fun clear() = queue.clear()

@@ -18,7 +18,7 @@ class SocialMediaLinks(socials: JsonObject) {
     val forums: String?
 
     init {
-        if(!socials.has("links")){
+        if (!socials.has("links")) {
             youtube = null
             discord = null
             instagram = null
@@ -26,7 +26,7 @@ class SocialMediaLinks(socials: JsonObject) {
             twitter = null
             forums = null
 
-        }else {
+        } else {
             val links = socials.getJsonObject("links")
             youtube = if (links.has("YOUTUBE")) links.getString("YOUTUBE") else null
             discord = if (links.has("DISCORD")) links.getString("DISCORD") else null

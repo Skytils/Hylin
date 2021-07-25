@@ -1,6 +1,7 @@
 package skytils.kopixel
 
-import skytils.kopixel.request.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import skytils.kopixel.extension.getArray
 import skytils.kopixel.extension.getJsonObject
 import skytils.kopixel.extension.getString
@@ -8,9 +9,8 @@ import skytils.kopixel.extension.toUUID
 import skytils.kopixel.guild.Guild
 import skytils.kopixel.player.OnlineStatus
 import skytils.kopixel.player.Player
+import skytils.kopixel.request.*
 import skytils.kopixel.skyblock.Profile
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import java.util.*
 
 
@@ -28,15 +28,15 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
          * @param key A Hypixel API key
          * @return A HypixelAPI instance
          */
-        fun CoroutineScope.NewKoPixelAPI(key: String): skytils.kopixel.KoPixelAPI =
-            skytils.kopixel.KoPixelAPI(key, this)
+        fun CoroutineScope.NewKoPixelAPI(key: String): KoPixelAPI =
+            KoPixelAPI(key, this)
 
         /**
          * Function for creating a new KoPixel API
          * @param key A Hypixel API key
          * @return A HypixelAPI instance
          */
-        fun NewKoPixelAPI(key: String): skytils.kopixel.KoPixelAPI = skytils.kopixel.KoPixelAPI(key)
+        fun NewKoPixelAPI(key: String): KoPixelAPI = KoPixelAPI(key)
 
         const val endpoint = "https://api.hypixel.net"
     }
@@ -54,12 +54,14 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
     fun getName(uuid: UUID) = AsyncRequest(scope) {
         getNameSync(uuid)
     }.launch()
+
     fun getNameSync(uuid: UUID): String {
         // Check if uuid is already cached
-        if(uuid in UUIDsToNames) {
+        if (uuid in UUIDsToNames) {
             return UUIDsToNames[uuid]!!
-        }else {
-            val name = connectionHandler.readJSON("https://sessionserver.mojang.com/session/minecraft/profile/$uuid")["name"].asString
+        } else {
+            val name =
+                connectionHandler.readJSON("https://sessionserver.mojang.com/session/minecraft/profile/$uuid")["name"].asString
             // Cache to both hashmaps
             namesToUUIDs[name] = uuid
             UUIDsToNames[uuid] = name
@@ -76,6 +78,7 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
     fun getUUID(name: String) = AsyncRequest(scope) {
         getUUIDSync(name)
     }.launch()
+
     fun getUUIDSync(name: String): UUID {
         // Check if name is already cached
         if (name in namesToUUIDs) {
@@ -106,7 +109,8 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
      * @param name The username of a player
      * @return A player object representing the player
      */
-    fun getPlayer(name: String): AsyncRequest<Player> = AsyncRequest(scope) { getPlayerSync(getUUIDSync(name)) }.launch()
+    fun getPlayer(name: String): AsyncRequest<Player> =
+        AsyncRequest(scope) { getPlayerSync(getUUIDSync(name)) }.launch()
 
     /**
      * Get a player with their username synchronously
@@ -122,7 +126,8 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
      * @param uuid The UUID of a player
      * @return A player object representing the player
      */
-    fun getPlayerSync(uuid: UUID) = Player(connectionHandler.hypixelJSON("${skytils.kopixel.KoPixelAPI.Companion.endpoint}/player?key=$key&uuid=$uuid"))
+    fun getPlayerSync(uuid: UUID) =
+        Player(connectionHandler.hypixelJSON("${KoPixelAPI.Companion.endpoint}/player?key=$key&uuid=$uuid"))
 
 
     /**
@@ -130,14 +135,14 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
      *
      * @param name A username or UUID in String form of a player
      */
-    fun get(name: String) = if(name.length <= 16) getPlayer(name) else getPlayer(name.toUUID())
+    fun get(name: String) = if (name.length <= 16) getPlayer(name) else getPlayer(name.toUUID())
 
     /**
      * Get a player with either a username or a UUID synchronously
      *
      * @param name A username or UUID in String form of a player
      */
-    fun getSync(name: String) = if(name.length <= 16) getPlayerSync(name) else getPlayerSync(name.toUUID())
+    fun getSync(name: String) = if (name.length <= 16) getPlayerSync(name) else getPlayerSync(name.toUUID())
 
     /**
      * Get a player's skyblock profiles with their UUID
@@ -166,7 +171,9 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
      * @return A list of the player's skyblock profiles
      */
     fun getSkyblockProfilesSync(uuid: UUID): List<Profile> {
-        val profiles = connectionHandler.hypixelJSON("${skytils.kopixel.KoPixelAPI.Companion.endpoint}/skyblock/profiles?key=$key&uuid=$uuid").getArray("profiles")
+        val profiles =
+            connectionHandler.hypixelJSON("${KoPixelAPI.Companion.endpoint}/skyblock/profiles?key=$key&uuid=$uuid")
+                .getArray("profiles")
         return profiles.map { Profile(it.asJsonObject) }.toList()
     }
 
@@ -193,7 +200,8 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
      * @return The online status of a player
      */
     fun statusSync(uuid: UUID): OnlineStatus {
-        val json = connectionHandler.hypixelJSON("${skytils.kopixel.KoPixelAPI.Companion.endpoint}/status?key=$key&uuid=$uuid")
+        val json =
+            connectionHandler.hypixelJSON("${KoPixelAPI.Companion.endpoint}/status?key=$key&uuid=$uuid")
         return OnlineStatus(json)
     }
 
@@ -235,8 +243,9 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
      * @return The guild of the player
      */
     fun guildSync(uuid: UUID): Guild? {
-        val json = connectionHandler.hypixelJSON("${skytils.kopixel.KoPixelAPI.Companion.endpoint}/guild?key=$key&player=$uuid")
-        if(json.get("guild").isJsonNull) return null
+        val json =
+            connectionHandler.hypixelJSON("${KoPixelAPI.Companion.endpoint}/guild?key=$key&player=$uuid")
+        if (json.get("guild").isJsonNull) return null
         return Guild(json.getJsonObject("guild"))
     }
 
@@ -270,7 +279,8 @@ class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope 
      */
     fun friendsSync(uuid: UUID): List<UUID> {
         // Read the contents of the endpoint as JSON
-        val json = connectionHandler.hypixelJSON("${skytils.kopixel.KoPixelAPI.Companion.endpoint}/friends?key=$key&uuid=$uuid")
+        val json =
+            connectionHandler.hypixelJSON("${KoPixelAPI.Companion.endpoint}/friends?key=$key&uuid=$uuid")
 
         return json["records"].asJsonArray.map { record ->
             val uuidSender = record.asJsonObject.getString("uuidSender")

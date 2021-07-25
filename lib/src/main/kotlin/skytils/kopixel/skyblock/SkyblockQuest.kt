@@ -1,7 +1,8 @@
 package skytils.kopixel.skyblock
 
 import com.google.gson.JsonObject
-import skytils.kopixel.extension.converter.*
+import skytils.kopixel.extension.converter.byDate
+import skytils.kopixel.extension.converter.byEnum
 
 /**
  * Represents a quest in skyblock

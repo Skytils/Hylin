@@ -6,10 +6,10 @@ import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
 import skytils.kopixel.extension.getBoolean
 import skytils.kopixel.extension.getString
-import java.net.URL
 import java.io.InputStreamReader
 import java.io.Reader
 import java.net.HttpURLConnection
+import java.net.URL
 import java.util.zip.GZIPInputStream
 
 
@@ -47,7 +47,7 @@ class ConnectionHandler {
 
     fun hypixelJSON(endpoint: String): JsonObject {
         val readJSON = readJSON(endpoint)
-        if(!readJSON.getBoolean("success")) {
+        if (!readJSON.getBoolean("success")) {
             throw HypixelAPIException(endpoint, readJSON.getString("cause"))
         }
         return readJSON

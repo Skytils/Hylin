@@ -1,7 +1,7 @@
 package skytils.kopixel.skyblock
 
 import com.google.gson.JsonObject
-import skytils.kopixel.extension.*
+import skytils.kopixel.extension.getFloat
 
 /**
  * Represents all skills of a Member
@@ -19,5 +19,5 @@ class Skills(private val json: JsonObject) {
     val carpentryXP = skill("carpentry")
     val runecraftingXP = skill("runecrafting")
 
-    fun skill(s: String): Float? = if(json.has("experience_skill_$s")) json.getFloat("experience_skill_$s") else null
+    fun skill(s: String): Float? = if (json.has("experience_skill_$s")) json.getFloat("experience_skill_$s") else null
 }

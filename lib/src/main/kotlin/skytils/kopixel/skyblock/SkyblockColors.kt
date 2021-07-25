@@ -1,11 +1,8 @@
 package skytils.kopixel.skyblock
 
-import java.util.*
-import kotlin.collections.ArrayList
-
 class SkyblockColors {
     companion object {
-        var skyblockColors: Map<String, Int> = hashMapOf(
+        val skyblockColors = mapOf(
             "ranchers_boots" to 0xCC5500,
             "squid_boots" to 0x000000,
             "farmer_boots" to 0xCC5500,
@@ -144,78 +141,78 @@ class SkyblockColors {
             "farm_suit_leggings" to 0xFFFF00,
             "farm_suit_chestplate" to 0xFFFF00,
         )
-        var crystalArmorColors: List<Int> = ArrayList(
-            Arrays.asList(
-                0x1F0030,
-                0x46085E,
-                0x54146E,
-                0x5D1C78,
-                0x63237D,
-                0x6A2C82,
-                0x7E4196,
-                0x8E51A6,
-                0x9C64B3,
-                0xA875BD,
-                0xB88BC9,
-                0xC6A3D4,
-                0xD9C1E3,
-                0xE5D1ED,
-                0xEFE1F5,
-                0xFCF3FF
-            )
+        val crystalArmorColors = listOf(
+            0x1F0030,
+            0x46085E,
+            0x54146E,
+            0x5D1C78,
+            0x63237D,
+            0x6A2C82,
+            0x7E4196,
+            0x8E51A6,
+            0x9C64B3,
+            0xA875BD,
+            0xB88BC9,
+            0xC6A3D4,
+            0xD9C1E3,
+            0xE5D1ED,
+            0xEFE1F5,
+            0xFCF3FF
         )
-        var fairyArmorColors: List<Int> = ArrayList(
-            Arrays.asList(
-                0x660066,
-                0x660033,
-                0x99004C,
-                0xCC0066,
-                0xFF007F,
-                0xFF3399,
-                0xFF66B2,
-                0xFF99CC,
-                0xFFCCE5,
-                0xFF99CC,
-                0xFF66B2,
-                0xFF3399,
-                0xFF007F,
-                0xCC0066,
-                0x99004C,
-                0x660033,
-                0x660066,
-                0x990099,
-                0xCC00CC,
-                0xFF00FF,
-                0xFF33FF,
-                0xFF66FF,
-                0xFF99FF,
-                0xFFCCFF,
-                0xE5CCFF,
-                0xCC99FF,
-                0xB266FF,
-                0x9933FF,
-                0x7F00FF,
-                0x6600CC,
-                0x4C0099,
-                0x330066,
-                0x4C0099,
-                0x6600CC,
-                0x7F00FF,
-                0x9933FF,
-                0xB266FF,
-                0xCC99FF,
-                0xE5CCFF,
-                0xFFCCFF,
-                0xFF99FF,
-                0xFF66FF,
-                0xFF33FF,
-                0xFF00FF,
-                0xCC00CC,
-                0x990099
-            )
+
+        val fairyArmorColors = listOf(
+            0x660066,
+            0x660033,
+            0x99004C,
+            0xCC0066,
+            0xFF007F,
+            0xFF3399,
+            0xFF66B2,
+            0xFF99CC,
+            0xFFCCE5,
+            0xFF99CC,
+            0xFF66B2,
+            0xFF3399,
+            0xFF007F,
+            0xCC0066,
+            0x99004C,
+            0x660033,
+            0x660066,
+            0x990099,
+            0xCC00CC,
+            0xFF00FF,
+            0xFF33FF,
+            0xFF66FF,
+            0xFF99FF,
+            0xFFCCFF,
+            0xE5CCFF,
+            0xCC99FF,
+            0xB266FF,
+            0x9933FF,
+            0x7F00FF,
+            0x6600CC,
+            0x4C0099,
+            0x330066,
+            0x4C0099,
+            0x6600CC,
+            0x7F00FF,
+            0x9933FF,
+            0xB266FF,
+            0xCC99FF,
+            0xE5CCFF,
+            0xFFCCFF,
+            0xFF99FF,
+            0xFF66FF,
+            0xFF33FF,
+            0xFF00FF,
+            0xCC00CC,
+            0x990099
         )
+
         fun isExotic(id: String, color: Int): Boolean {
-            return skyblockColors[id.lowercase()] != null && skyblockColors[id.lowercase()] != color && !crystalArmorColors.contains(color) && !fairyArmorColors.contains(color)
+            return skyblockColors[id.lowercase()] != null && skyblockColors[id.lowercase()] != color && !crystalArmorColors.contains(
+                color
+            ) && !fairyArmorColors.contains(color)
         }
     }
 }

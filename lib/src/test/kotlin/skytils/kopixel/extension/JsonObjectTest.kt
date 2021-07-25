@@ -1,9 +1,8 @@
 package skytils.kopixel.extension
 
 import com.google.gson.JsonObject
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class JsonObjectTest {
     @Test

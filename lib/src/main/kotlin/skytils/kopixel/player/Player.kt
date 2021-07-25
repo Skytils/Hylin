@@ -1,12 +1,10 @@
 package skytils.kopixel.player
 
 import com.google.gson.JsonObject
-import skytils.kopixel.extension.*
 import skytils.kopixel.extension.converter.*
+import skytils.kopixel.extension.path
 import skytils.kopixel.player.rank.PackageRank
 import skytils.kopixel.player.rank.SpecialRank
-import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * Represents a Hypixel Player
@@ -15,28 +13,28 @@ import kotlin.collections.HashMap
 class Player(json: JsonObject) {
     val player = json.path("player")
 
-    val name                        by player.byString("displayname")
-    val uuid                        by player.byUUID("uuid")
-    val aliases                     by player.byList<String>("knownAliases")
-    val socials                     by player.byExternal<SocialMediaLinks>("socialMedia")
+    val name by player.byString("displayname")
+    val uuid by player.byUUID("uuid")
+    val aliases by player.byList<String>("knownAliases")
+    val socials by player.byExternal<SocialMediaLinks>("socialMedia")
 
-    val firstLogin                  by player.byDate()
-    val lastLogin                   by player.byDate()
-    val lastLogout                  by player.byDate()
+    val firstLogin by player.byDate()
+    val lastLogin by player.byDate()
+    val lastLogout by player.byDate()
 
-    val specialRank: SpecialRank?   by player.byEnum("rank", SpecialRank::class)
-    val rank                        by player.byEnum("newPackageRank", PackageRank::class)
+    val specialRank: SpecialRank? by player.byEnum("rank", SpecialRank::class)
+    val rank by player.byEnum("newPackageRank", PackageRank::class)
 
-    val networkXP                   by player.byInt("networkExp")
-    val achievementPoints           by player.byInt("achievementPoints")
-    val achievements                by player.byMap<Int>()
-    val achievementsOneTime         by player.byList<String>()
-    val karma                       by player.byInt("karma")
+    val networkXP by player.byInt("networkExp")
+    val achievementPoints by player.byInt("achievementPoints")
+    val achievements by player.byMap<Int>()
+    val achievementsOneTime by player.byList<String>()
+    val karma by player.byInt("karma")
 
-    val mcVersionRp                 by player.byString()
-    val petConsumables              by player.byMap<Int>()
-    val settings                    by player.byMap<Int>()
-    val mostRecentGameType          by player.byString()
+    val mcVersionRp by player.byString()
+    val petConsumables by player.byMap<Int>()
+    val settings by player.byMap<Int>()
+    val mostRecentGameType by player.byString()
 
     /**
      * Checks if this player is online

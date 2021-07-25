@@ -1,8 +1,8 @@
 package skytils.kopixel
 
+import kotlinx.coroutines.runBlocking
 import skytils.kopixel.KoPixelAPI.Companion.NewKoPixelAPI
 import skytils.kopixel.extension.toUUID
-import kotlinx.coroutines.runBlocking
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -39,12 +39,14 @@ class KoPixelAPITest {
 
         fun scan(uuid: UUID) {
             // Grab the profiles of the player asynchronously
-            api.getSkyblockProfiles(uuid).whenComplete { profiles -> profiles.forEach { profile ->
-                profile.scan { uuid, member, inv, item ->
-                    if (item.colorable() && item.exotic())
-                        println("Exotic Found: \n\t${item.id()} \n\t${item.hexColor()} \n\t$uuid \n\t${inv.name}")
+            api.getSkyblockProfiles(uuid).whenComplete { profiles ->
+                profiles.forEach { profile ->
+                    profile.scan { uuid, member, inv, item ->
+                        if (item.colorable() && item.exotic())
+                            println("Exotic Found: \n\t${item.id()} \n\t${item.hexColor()} \n\t$uuid \n\t${inv.name}")
+                    }
                 }
-            } }
+            }
         }
         scan("cab60d114bd84d5fbcc46383ee8f6ed1".toUUID())
     }

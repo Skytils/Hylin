@@ -1,5 +1,9 @@
 package skytils.kopixel.request
-import kotlinx.coroutines.*
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelAndJoin
 
 @Suppress("EXPERIMENTAL_API_USAGE", "UNCHECKED_CAST", "DeferredResultUnused")
 open class AsyncRequest<T>(private val scope: CoroutineScope, private val block: suspend CoroutineScope.() -> T) {

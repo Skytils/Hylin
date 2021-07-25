@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
  */
 @Suppress("UNCHECKED_CAST")
 fun <T> JsonObject.getWithGeneric(key: String, clazz: KClass<*>): T {
-    return when(clazz) {
+    return when (clazz) {
         String::class -> getString(key) as T
         Boolean::class -> getBoolean(key) as T
         Int::class -> getInt(key) as T
@@ -32,7 +32,7 @@ fun <T> JsonObject.getWithGeneric(key: String, clazz: KClass<*>): T {
  */
 @Suppress("UNCHECKED_CAST")
 fun <T> JsonElement.getWithGeneric(clazz: KClass<*>): T {
-    return when(clazz) {
+    return when (clazz) {
         String::class -> asString as T
         Boolean::class -> asBoolean as T
         Int::class -> asInt as T

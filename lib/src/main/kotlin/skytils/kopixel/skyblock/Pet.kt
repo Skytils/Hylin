@@ -10,14 +10,14 @@ import java.util.*
  * @param json A JsonObject to construct data from
  */
 class Pet(json: JsonObject) {
-    val uuid: UUID?         by json.byUUID()
-    val type                by json.byString()
-    val xp                  by json.byFloat("exp")
-    val active              by json.byBoolean()
-    val tier                by json.byEnum("tier", Tier::class)
-    val heldItem: String?   by json.byString()
-    val candyUsed           by json.byInt()
-    val skin: String?       by json.byString()
+    val uuid: UUID? by json.byUUID()
+    val type by json.byString()
+    val xp by json.byFloat("exp")
+    val active by json.byBoolean()
+    val tier by json.byEnum("tier", Tier::class)
+    val heldItem: String? by json.byString()
+    val candyUsed by json.byInt()
+    val skin: String? by json.byString()
 
     override fun toString(): String {
         return "Pet(\n" +

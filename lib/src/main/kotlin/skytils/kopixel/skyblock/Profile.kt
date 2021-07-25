@@ -1,11 +1,10 @@
 package skytils.kopixel.skyblock
 
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import skytils.kopixel.extension.*
 import skytils.kopixel.extension.converter.byExternal
 import skytils.kopixel.extension.converter.byExternalMap
 import skytils.kopixel.extension.converter.byString
+import skytils.kopixel.extension.toUUID
 import skytils.kopixel.skyblock.banking.Banking
 import skytils.kopixel.skyblock.item.Inventory
 import skytils.kopixel.skyblock.item.InventoryItem
@@ -16,10 +15,10 @@ import java.util.*
  * @param json A JsonObject to construct this profile from
  */
 class Profile(json: JsonObject) {
-    val id: String          by json.byString("profile_id")
-    val cuteName: String    by json.byString("cute_name")
-    val members             by json.byExternalMap<Member>()
-    val banking: Banking?   by json.byExternal<Banking>()
+    val id: String by json.byString("profile_id")
+    val cuteName: String by json.byString("cute_name")
+    val members by json.byExternalMap<Member>()
+    val banking: Banking? by json.byExternal<Banking>()
 
     inline fun scan(crossinline iterator: (uuid: UUID, member: Member, inv: Inventory, item: InventoryItem) -> Unit) {
         members.forEach { uuid, member ->
