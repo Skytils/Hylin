@@ -16,7 +16,7 @@ plugins {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "skytils.kopixel"
+            groupId = "skytils.hylin"
             artifactId = "library"
             version = "0.1"
 

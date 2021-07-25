@@ -1,4 +1,4 @@
-package skytils.kopixel.player
+package skytils.hylin.player
 
 import com.google.gson.JsonObject
 import skytils.hylin.extension.converter.*
