@@ -1,0 +1,13 @@
+name: AutoJitpack
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: badasintended/autojitpack@v1
+        with:
+          version: ${{ github.sha }}
