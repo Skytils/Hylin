@@ -22,6 +22,7 @@ import com.google.gson.JsonObject
 import skytils.hylin.extension.converter.*
 import skytils.hylin.extension.getJsonObject
 import skytils.hylin.skyblock.item.Inventory
+import skytils.hylin.skyblock.misc.Griffin
 import skytils.hylin.skyblock.slayer.Slayers
 
 /**
@@ -53,6 +54,9 @@ class Member(val json: JsonObject) {
     val wardrobe = inventory("wardrobe", "wardrobe_contents")
     val vault = inventory("vault", "personal_vault_contents")
     val storage: Map<String, Inventory>? by json.byExternalMap("backpack_contents")
+
+    // Misc
+    val griffin by json.byExternal<Griffin>()
 
     init {
         storage?.forEach {
