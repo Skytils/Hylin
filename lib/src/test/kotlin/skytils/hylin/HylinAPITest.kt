@@ -20,7 +20,9 @@ package skytils.hylin
 
 import kotlinx.coroutines.runBlocking
 import skytils.hylin.HylinAPI.Companion.createHylinAPI
+import skytils.hylin.extension.getLatestProfileForMemberOrNull
 import skytils.hylin.extension.toUUID
+import java.io.File
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -80,5 +82,15 @@ class HylinAPITest {
     fun guildTest() {
         val api = createHylinAPI(testKey)
         assertEquals(api.guildSync("skyf"), null)
+    }
+
+    @Test
+    fun dungeonsTest() {
+        val api = createHylinAPI(testKey)
+
+        println("Writing to file")
+        File("test.txt").writeText(api.getSkyblockProfilesSync("skyf").getLatestProfileForMemberOrNull(api.getUUIDSync("skyf"))?.dungeons.toString())
+        println("finished writing")
+
     }
 }

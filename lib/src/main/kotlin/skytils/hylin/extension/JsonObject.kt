@@ -55,6 +55,8 @@ fun <T> JsonElement.getWithGeneric(clazz: KClass<*>): T {
         Boolean::class -> asBoolean as T
         Int::class -> asInt as T
         Long::class -> asLong as T
+        Float::class -> asFloat as T
+        Double::class -> asDouble as T
         Date::class -> Date(asLong) as T
         UUID::class -> asString.toUUID() as T
         JsonObject::class -> asJsonObject as T

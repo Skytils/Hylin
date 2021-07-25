@@ -39,6 +39,7 @@ internal fun JsonObject.byString(key: String? = null) = JsonPropertyDelegate(thi
 internal fun JsonObject.byUUID(key: String? = null) = JsonPropertyDelegate(this, key) { it.asString.toUUID() }
 internal fun JsonObject.byInt(key: String? = null) = JsonPropertyDelegate(this, key) { it.asInt }
 internal fun JsonObject.byFloat(key: String? = null) = JsonPropertyDelegate(this, key) { it.asFloat }
+internal fun JsonObject.byDouble(key: String? = null) = JsonPropertyDelegate(this, key) { it.asDouble }
 internal fun JsonObject.byBoolean(key: String? = null) = JsonPropertyDelegate(this, key) { it.asBoolean }
 internal fun JsonObject.byLong(key: String? = null) = JsonPropertyDelegate(this, key) { it.asLong }
 internal fun JsonObject.byDate(key: String? = null) = JsonPropertyDelegate(this, key) { Date(it.asLong) }

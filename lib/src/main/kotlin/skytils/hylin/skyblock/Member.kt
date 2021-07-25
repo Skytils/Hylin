@@ -21,6 +21,7 @@ package skytils.hylin.skyblock
 import com.google.gson.JsonObject
 import skytils.hylin.extension.converter.*
 import skytils.hylin.extension.getJsonObject
+import skytils.hylin.skyblock.dungeons.DungeonStats
 import skytils.hylin.skyblock.item.Inventory
 import skytils.hylin.skyblock.misc.Griffin
 import skytils.hylin.skyblock.slayer.Slayers
@@ -45,6 +46,8 @@ class Member(val json: JsonObject) {
     val slayers by json.byExternal<Slayers>("slayer_bosses")
     val skills by lazy { Skills(json) }
     val unlockedCollections: List<String>? by json.byList("unlocked_coll_tiers")
+
+    val dungeons by json.byExternal<DungeonStats>("dungeons")
 
     // Inventories
     val inventories = mutableListOf<Inventory>()
@@ -95,12 +98,10 @@ class Member(val json: JsonObject) {
                 "\tarmor=$armor, \n" +
                 "\twardrobe=$wardrobe, \n" +
                 "\tvault=$vault, \n" +
-                "\tstorage=$storage, \n" +
+                "\tstorage=$storage\n" +
+                "\tdungeons=$dungeons\n" +
                 "\tgriffin=$griffin\n" +
                 ")"
     }
-
-    // TODO: Dungeons external model
-
 
 }
