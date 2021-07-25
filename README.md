@@ -73,10 +73,10 @@ scan("cab60d114bd84d5fbcc46383ee8f6ed1".toUUID())
 ```
 Hylin currently supports a large portion of the skyblock API and regular player API, although resource, auction, bazaar, and dungeon implementations are planned for the near future.
 
-##License
+## License
 [GNU AGPL 3.0](https://github.com/Skytils/Hylin/blob/master/LICENSE.md)
 
 ## Original Project & License
-[ryanhcode's Hylin](https://github.com/ryanhcode/Hylin)
+[ryanhcode's KoPixel](https://github.com/ryanhcode/Hylin)
 
 [MIT](https://choosealicense.com/licenses/mit/)
