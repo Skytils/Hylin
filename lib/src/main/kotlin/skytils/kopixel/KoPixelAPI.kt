@@ -19,7 +19,7 @@ import java.util.*
  *
  * @param key A Hypixel API key
  */
-class KoPixelAPI private constructor(val key: String, val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)) {
+class KoPixelAPI private constructor(var key: String, val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)) {
 
     companion object {
 
