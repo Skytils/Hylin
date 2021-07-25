@@ -33,3 +33,15 @@ fun List<Profile>.getLatestProfileForMemberOrNull(uuid: UUID): Member? {
         it.members[uuidString]?.lastSave?.time ?: 0L
     }?.members?.get(uuidString)
 }
+
+/**
+ * Gets the latest profile saved out of a list of Profiles or returns `null` if the list is empty
+ * @param uuid The uuid of the player
+ * @return The last played Skyblock profile of the player
+ */
+fun List<Profile>.getLatestProfileForMemberOrNull(uuid: String): Member? {
+    val uuidString = uuid.replace("-", "")
+    return this.maxByOrNull {
+        it.members[uuidString]?.lastSave?.time ?: 0L
+    }?.members?.get(uuidString)
+}

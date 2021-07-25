@@ -192,7 +192,7 @@ class HylinAPI private constructor(var key: String, val scope: CoroutineScope = 
         val profiles =
             connectionHandler.hypixelJSON("$endpoint/skyblock/profiles?key=$key&uuid=$uuid")
                 .getArray("profiles")
-        return profiles.map { Profile(it.asJsonObject) }.toList()
+        return profiles.map { Profile(it.asJsonObject) }
     }
 
     /**
