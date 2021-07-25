@@ -44,33 +44,33 @@ internal fun JsonObject.byLong(key: String? = null) = JsonPropertyDelegate(this,
 internal fun JsonObject.byDate(key: String? = null) = JsonPropertyDelegate(this, key) { Date(it.asLong) }
 
 internal inline fun <reified T> JsonObject.byExternalList(key: String? = null) = JsonPropertyDelegate(this, key) {
-    it.asJsonArray.map {
+    it.asJsonArray.map { element ->
         val constructor: Constructor<*> = T::class.java.getConstructor(JsonObject::class.java)
             ?: error("External lists's generics must have a proper constructor")
-        constructor.newInstance(it) as T
+        constructor.newInstance(element) as T
     }.toList()
 }
 
 internal inline fun <reified T> JsonObject.byList(key: String? = null) = JsonPropertyDelegate(this, key) {
-    it.asJsonArray.map {
-        it.getWithGeneric<T>(T::class)
+    it.asJsonArray.map { element ->
+        element.getWithGeneric<T>(T::class)
     }.toList()
 }
 
 internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null) = JsonPropertyDelegate(this, key) {
     val map = mutableMapOf<String, T>()
-    it.asJsonObject.entrySet().forEach {
+    it.asJsonObject.entrySet().forEach { entry ->
         val constructor: Constructor<*> = T::class.java.getConstructor(JsonObject::class.java)
             ?: error("External map's generics must have a proper constructor")
-        map.put(it.key, constructor.newInstance(it.value) as T)
+        map[entry.key] = constructor.newInstance(entry.value) as T
     }
     map.toMap()
 }
 
 internal inline fun <reified T> JsonObject.byMap(key: String? = null) = JsonPropertyDelegate(this, key) { element ->
-    val map = mutableMapOf<String, T>()
-    element.asJsonObject.entrySet().forEach { map[it.key] = it.value.getWithGeneric(T::class) as T }
-    map.toMap()
+    element.asJsonObject.entrySet().associate {
+        it.key to it.value.getWithGeneric(T::class) as T
+    }
 }
 
 internal fun <T : Enum<T>> JsonObject.byEnum(key: String? = null, klazz: KClass<out Enum<T>>) =
