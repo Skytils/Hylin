@@ -16,19 +16,19 @@ Or visit Jitpack and [select a version](https://jitpack.io/#Skytils/Hylin/latest
 
 ## Usage
 
-In order to obtain a `HylinAPI` instance, use NewHylinAPI
-If you plan on just using the library synchronously, you can use NewHylinAPI wherever you like.
+In order to obtain a `HylinAPI` instance, use createHylinAPI
+If you plan on just using the library synchronously, you can use createHylinAPI wherever you like.
 
 ```kotlin
 val hypixelAPIKey = "..."
-val api = NewHylinAPI(hypixelAPIKey)
+val api = createHylinAPI(hypixelAPIKey)
 ...
 ```
 However, if you are planning to use Hylin asynchronously, the API must be created inside of a CoroutineScope, or inside of a block such as `runBlocking` which is recommended.
 ```kotlin
 fun main() = runBlocking {
     val hypixelAPIKey = "..."
-    val api = NewHylinAPI(hypixelAPIKey)
+    val api = createHylinAPI(hypixelAPIKey)
     ...
 }
 ```

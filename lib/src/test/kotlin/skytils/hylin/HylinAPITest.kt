@@ -19,7 +19,7 @@
 package skytils.hylin
 
 import kotlinx.coroutines.runBlocking
-import skytils.hylin.HylinAPI.Companion.NewHylinAPI
+import skytils.hylin.HylinAPI.Companion.createHylinAPI
 import skytils.hylin.extension.toUUID
 import java.util.*
 import kotlin.test.Test
@@ -31,19 +31,19 @@ class HylinAPITest {
 
     @Test
     fun getName() = runBlocking {
-        val api = NewHylinAPI(testKey)
+        val api = createHylinAPI(testKey)
         assertEquals(api.getUUIDSync("skyf"), "7c86a219-cdab-49a9-bd44-e34279bd590b".toUUID())
     }
 
     @Test
     fun getUUID() = runBlocking {
-        val api = NewHylinAPI(testKey)
+        val api = createHylinAPI(testKey)
         assertEquals(api.getNameSync("7c86a219-cdab-49a9-bd44-e34279bd590b".toUUID()), "skyf")
     }
 
     @Test
     fun getSkyblockProfilesTime() = runBlocking {
-        val api = NewHylinAPI(testKey)
+        val api = createHylinAPI(testKey)
         val prevTime = System.currentTimeMillis()
         api.getSkyblockProfilesSync("skyf")
         println("time ${System.currentTimeMillis() - prevTime}")
@@ -53,7 +53,7 @@ class HylinAPITest {
     fun scanTest(): Unit = runBlocking {
 
         // Make a new Hylin API in this scope
-        val api = NewHylinAPI(testKey)
+        val api = createHylinAPI(testKey)
 
         fun scan(uuid: UUID) {
             // Grab the profiles of the player asynchronously
@@ -71,14 +71,14 @@ class HylinAPITest {
 
     @Test
     fun status() {
-        val api = NewHylinAPI(testKey)
+        val api = createHylinAPI(testKey)
 
         println(api.statusSync("skyf"))
     }
 
     @Test
     fun guildTest() {
-        val api = NewHylinAPI(testKey)
+        val api = createHylinAPI(testKey)
         assertEquals(api.guildSync("skyf"), null)
     }
 }

@@ -67,44 +67,44 @@ fun <T> JsonElement.getWithGeneric(clazz: KClass<*>): T {
  * Get a string with a key
  * @param key Key/name of property
  */
-fun JsonObject.getString(key: String): String = this.get(key).asString
+fun JsonObject.getString(key: String): String = this[key].asString
 
 /**
  * Get an int with a key
  * @param key Key/name of property
  */
-fun JsonObject.getInt(key: String): Int = this.get(key).asInt
+fun JsonObject.getInt(key: String): Int = this[key].asInt
 
 /**
  * Get a long with a key
  * @param key Key/name of property
  */
-fun JsonObject.getLong(key: String): Long = this.get(key).asLong
+fun JsonObject.getLong(key: String): Long = this[key].asLong
 
 /**
  * Get a float with a key
  * @param key Key/name of property
  */
-fun JsonObject.getFloat(key: String): Float = this.get(key).asFloat
+fun JsonObject.getFloat(key: String): Float = this[key].asFloat
 
 
 /**
  * Get an array with a key
  * @param key Key/name of property
  */
-fun JsonObject.getArray(key: String): JsonArray = this.get(key).asJsonArray
+fun JsonObject.getArray(key: String): JsonArray = this[key].asJsonArray
 
 /**
  * Get a boolean with a key
  * @param key Key/name of property
  */
-fun JsonObject.getBoolean(key: String): Boolean = this.get(key).asBoolean
+fun JsonObject.getBoolean(key: String): Boolean = this[key].asBoolean
 
 /**
  * Get a JsonObject with a key
  * @param key Key/name of property
  */
-fun JsonObject.getJsonObject(key: String): JsonObject = this.get(key).asJsonObject
+fun JsonObject.getJsonObject(key: String): JsonObject = this[key].asJsonObject
 
 
 /**

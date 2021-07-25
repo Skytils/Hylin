@@ -46,7 +46,7 @@ class HylinAPI private constructor(var key: String, val scope: CoroutineScope = 
          * @param key A Hypixel API key
          * @return A HypixelAPI instance
          */
-        fun CoroutineScope.NewHylinAPI(key: String): HylinAPI =
+        fun CoroutineScope.createHylinAPI(key: String): HylinAPI =
             HylinAPI(key, this)
 
         /**
@@ -54,7 +54,7 @@ class HylinAPI private constructor(var key: String, val scope: CoroutineScope = 
          * @param key A Hypixel API key
          * @return A HypixelAPI instance
          */
-        fun NewHylinAPI(key: String): HylinAPI = HylinAPI(key)
+        fun createHylinAPI(key: String): HylinAPI = HylinAPI(key)
 
         const val endpoint = "https://api.hypixel.net"
     }
