@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import skytils.hylin.extension.converter.*
 import skytils.hylin.extension.getString
 import skytils.hylin.extension.path
+import skytils.hylin.player.SocialMediaLinks
 import skytils.hylin.player.rank.PackageRank
 import skytils.hylin.player.rank.SpecialRank
 
