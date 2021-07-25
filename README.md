@@ -1,7 +1,7 @@
-# KoPixel
-[![](https://jitpack.io/v/ryanhcode/KoPixel.svg)](https://jitpack.io/#ryanhcode/KoPixel)
+# Hylin
+[![](https://jitpack.io/v/Skytils/Hylin.svg)](https://jitpack.io/#Skytils/Hylin)
 
-KoPixel is a simple &amp; flexible asynchronous Hypixel API wrapper for Kotlin
+Hylin is a simple &amp; flexible asynchronous Hypixel API wrapper for Kotlin
 
 ## Installation
 
@@ -9,31 +9,31 @@ Add the following to your build.gradle(.kts)
 
 ```groovy
 dependencies {
-    implementation 'com.github.Skytils:KoPixel:$kopixel_version'
+    implementation 'com.github.Skytils:Hylin:$hylin_version'
 }
 ```
-Or visit Jitpack and [select a version](https://jitpack.io/#Skytils/KoPixel/latest) 
+Or visit Jitpack and [select a version](https://jitpack.io/#Skytils/Hylin/latest) 
 
 ## Usage
 
-In order to obtain a `KoPixelAPI` instance, use NewKoPixelAPI
-If you plan on just using the library synchronously, you can use NewKoPixelAPI wherever you like.
+In order to obtain a `HylinAPI` instance, use NewHylinAPI
+If you plan on just using the library synchronously, you can use NewHylinAPI wherever you like.
 
 ```kotlin
 val hypixelAPIKey = "..."
-val api = NewKoPixelAPI(hypixelAPIKey)
+val api = NewHylinAPI(hypixelAPIKey)
 ...
 ```
-However, if you are planning to use KoPixel asynchronously, the API must be created inside of a CoroutineScope, or inside of a block such as `runBlocking` which is recommended.
+However, if you are planning to use Hylin asynchronously, the API must be created inside of a CoroutineScope, or inside of a block such as `runBlocking` which is recommended.
 ```kotlin
 fun main() = runBlocking {
     val hypixelAPIKey = "..."
-    val api = NewKoPixelAPI(hypixelAPIKey)
+    val api = NewHylinAPI(hypixelAPIKey)
     ...
 }
 ```
 
-KoPixel has both asynchronous and synchronous methods for all functions.
+Hylin has both asynchronous and synchronous methods for all functions.
 
 Here you can see a method of synchronously obtaining if a player is online:
 ```kotlin
@@ -47,7 +47,7 @@ api.get("skyf").whenComplete { player->
     println("Online: $online")
 }
 ```
-If you choose to use KoPixel asynchronously, you may also use error handling for all requests.
+If you choose to use Hylin asynchronously, you may also use error handling for all requests.
 ```kotlin
 api.get("skyf").whenComplete { player->
     val online = player.online()
@@ -56,7 +56,7 @@ api.get("skyf").whenComplete { player->
     println("woah! there was an error: $exception")
 }
 ```
-Here you can see an example of utilizing KoPixel's asynchronous API to scan a player for Exotic Armor:
+Here you can see an example of utilizing Hylin's asynchronous API to scan a player for Exotic Armor:
 ```kotlin
 fun scan(uuid: UUID) {
   // Grab the profiles of the player asynchronously
@@ -71,12 +71,12 @@ fun scan(uuid: UUID) {
 }
 scan("cab60d114bd84d5fbcc46383ee8f6ed1".toUUID())
 ```
-KoPixel currently supports a large portion of the skyblock API and regular player API, although resource, auction, bazaar, and dungeon implementations are planned for the near future.
+Hylin currently supports a large portion of the skyblock API and regular player API, although resource, auction, bazaar, and dungeon implementations are planned for the near future.
 
 ##License
-[GNU AGPL 3.0](https://github.com/Skytils/KoPixel/blob/master/LICENSE.md)
+[GNU AGPL 3.0](https://github.com/Skytils/Hylin/blob/master/LICENSE.md)
 
 ## Original Project & License
-[ryanhcode's KoPixel](https://github.com/ryanhcode/KoPixel)
+[ryanhcode's Hylin](https://github.com/ryanhcode/Hylin)
 
 [MIT](https://choosealicense.com/licenses/mit/)

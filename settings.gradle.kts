@@ -19,5 +19,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = "KoPixel"
+rootProject.name = "Hylin"
 include("lib")
