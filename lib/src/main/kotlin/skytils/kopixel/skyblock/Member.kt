@@ -13,19 +13,19 @@ import skytils.kopixel.skyblock.slayer.Slayers
 @Suppress("MemberVisibilityCanBePrivate")
 class Member(val json: JsonObject) {
     val lastSave by json.byDate("last_save")
-    val stats: Map<String, Int>? by json.byMap<Int>()
-    val collection: Map<String, Int>? by json.byMap<Int>()
+    val stats: Map<String, Int>? by json.byMap()
+    val collection: Map<String, Int>? by json.byMap()
     val objectives by json.byExternalMap<SkyblockObjective>()
     val tutorial by json.byList<String>()
     val quests by json.byExternalMap<SkyblockQuest>()
     val purse by json.byInt("coin_purse")
     val fairySouls by json.byInt("fairy_souls_collected")
     val pets by json.byExternalList<Pet>("pets")
-    val craftedMinions: List<String>? by json.byList<String>("crafted_generators")
+    val craftedMinions: List<String>? by json.byList("crafted_generators")
     val visitedZones by json.byList<String>("visited_zones")
     val slayers by json.byExternal<Slayers>("slayer_bosses")
     val skills by lazy { Skills(json) }
-    val unlockedCollections: List<String>? by json.byList<String>("unlocked_coll_tiers")
+    val unlockedCollections: List<String>? by json.byList("unlocked_coll_tiers")
 
     // Inventories
     val inventories = mutableListOf<Inventory>()
@@ -34,7 +34,7 @@ class Member(val json: JsonObject) {
     val armor = inventory("armor", "inv_armor")
     val wardrobe = inventory("wardrobe", "wardrobe_contents")
     val vault = inventory("vault", "personal_vault_contents")
-    val storage: Map<String, Inventory>? by json.byExternalMap<Inventory>("backpack_contents")
+    val storage: Map<String, Inventory>? by json.byExternalMap("backpack_contents")
 
     init {
         storage?.forEach {

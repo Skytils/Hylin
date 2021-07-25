@@ -2,6 +2,7 @@ package skytils.kopixel.player
 
 import com.google.gson.JsonObject
 import skytils.kopixel.extension.converter.*
+import skytils.kopixel.extension.getString
 import skytils.kopixel.extension.path
 import skytils.kopixel.player.rank.PackageRank
 import skytils.kopixel.player.rank.SpecialRank
@@ -23,7 +24,13 @@ class Player(json: JsonObject) {
     val lastLogout by player.byDate()
 
     val specialRank: SpecialRank? by player.byEnum("rank", SpecialRank::class)
-    val rank by player.byEnum("newPackageRank", PackageRank::class)
+    val rank by lazy {
+        val packageRank by player.byEnum("newPackageRank", PackageRank::class)
+        if (packageRank == PackageRank.MVP_PLUS && runCatching { player.getString("monthlyPackageRank") }.getOrNull() == "SUPERSTAR") {
+            return@lazy PackageRank.MVP_PLUS_PLUS
+        }
+        return@lazy packageRank
+    }
 
     val networkXP by player.byInt("networkExp")
     val achievementPoints by player.byInt("achievementPoints")
