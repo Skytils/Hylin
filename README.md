@@ -9,7 +9,7 @@ Add the following to your build.gradle(.kts)
 
 ```groovy
 dependencies {
-    implementation 'com.github.Skytils:Hylin:$hylin_version'
+    implementation("com.github.Skytils:Hylin:$hylin_version")
 }
 ```
 Or visit Jitpack and [select a version](https://jitpack.io/#Skytils/Hylin/latest) 
