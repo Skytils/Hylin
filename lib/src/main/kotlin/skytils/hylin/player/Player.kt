@@ -19,10 +19,10 @@
 package skytils.hylin.player
 
 import com.google.gson.JsonObject
+import net.minecraft.util.EnumChatFormatting
 import skytils.hylin.extension.converter.*
-import skytils.hylin.extension.getString
 import skytils.hylin.extension.path
-import skytils.hylin.player.SocialMediaLinks
+import skytils.hylin.player.rank.MonthlyPackageRank
 import skytils.hylin.player.rank.PackageRank
 import skytils.hylin.player.rank.SpecialRank
 
@@ -43,12 +43,37 @@ class Player(json: JsonObject) {
     val lastLogout by player.byDate()
 
     val specialRank: SpecialRank? by player.byEnum("rank", SpecialRank::class)
+    val monthlyPackageRank: MonthlyPackageRank? by player.byEnum("monthlyPackageRank", MonthlyPackageRank::class)
+    val plusColor by lazy {
+        val rankPlusColor: String? by player.byString()
+        return@lazy EnumChatFormatting.getValueByName(rankPlusColor ?: "RED")
+    }
+    val mvpPlusPlusColor by lazy {
+        val monthlyRankColor: String? by player.byString()
+        return@lazy EnumChatFormatting.getValueByName(monthlyRankColor ?: "GOLD")
+    }
     val rank by lazy {
         val packageRank by player.byEnum("newPackageRank", PackageRank::class)
-        if (packageRank == PackageRank.MVP_PLUS && runCatching { player.getString("monthlyPackageRank") }.getOrNull() == "SUPERSTAR") {
+        if (packageRank == PackageRank.MVP_PLUS && monthlyPackageRank == MonthlyPackageRank.SUPERSTAR) {
             return@lazy PackageRank.MVP_PLUS_PLUS
         }
         return@lazy packageRank
+    }
+    val rankPrefix by lazy {
+        val prefix: String? by player.byString()
+        return@lazy prefix ?: when (specialRank ?: rank) {
+            PackageRank.VIP -> "§a[VIP]"
+            PackageRank.VIP_PLUS -> "§a[VIP§6+§a]"
+            PackageRank.MVP -> "§b[MVP]"
+            PackageRank.MVP_PLUS -> "§b[MVP${plusColor}+§b]"
+            PackageRank.MVP_PLUS_PLUS -> "${mvpPlusPlusColor}[MVP${plusColor}++${mvpPlusPlusColor}]"
+            SpecialRank.HELPER-> "§9[HELPER]"
+            SpecialRank.MODERATOR -> "§2[MOD]"
+            SpecialRank.GAME_MASTER -> "§2[GM]"
+            SpecialRank.ADMIN -> "§c[ADMIN]"
+            SpecialRank.YOUTUBER -> "§c[§fYOUTUBE§c]"
+            else -> "§7"
+        }
     }
 
     val networkXP by player.byInt("networkExp")
