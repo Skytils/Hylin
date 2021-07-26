@@ -25,12 +25,13 @@ import skytils.hylin.guild.Guild
 import skytils.hylin.mojang.AshconException
 import skytils.hylin.mojang.AshconPlayer
 import skytils.hylin.player.OnlineStatus
-import skytils.hylin.request.*
+import skytils.hylin.player.Player
+import skytils.hylin.request.AsyncRequest
+import skytils.hylin.request.ConnectionHandler
 import skytils.hylin.skyblock.Profile
 import skytils.hylin.player.Player
 import skytils.hylin.skyblock.Member
 import java.util.*
-import kotlin.jvm.Throws
 
 
 /**
@@ -75,7 +76,32 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
     }
 
     /**
-     * Get a players username with their UUID via Mojang API
+     * Get a player object from Electroid's API
+     *
+     * @param identifiable The player's UUID, dashed or non-dashed, or username
+     * @return The player's username
+     */
+    fun getMojangPlayer(identifiable: String) = AsyncRequest(scope) {
+        getMojangPlayerSync(identifiable)
+    }.launch()
+
+    /**
+     * Get a player object via Electroid's API synchronouslyy
+     *
+     * @param identifiable The player's UUID, dashed or non-dashed, or username
+     * @return The player's username
+     */
+    fun getMojangPlayerSync(identifiable: String): AshconPlayer {
+        val json = connectionHandler.readJSON("https://api.ashcon.app/mojang/v2/user/$identifiable")
+        if (json.has("error")) {
+            throw AshconException(json)
+        }
+        return AshconPlayer(json)
+    }
+
+
+    /**
+     * Get a players username with their UUID via ELectroid's API synchronously
      *
      * @param uuid The player's UUID
      * @return The player's username
@@ -84,25 +110,29 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
         getNameSync(uuid)
     }.launch()
 
+    /**
+     * Get a players username with their UUID via Electroid's API synchronously
+     *
+     * @param uuid The player's UUID
+     * @return The player's username
+     */
     fun getNameSync(uuid: UUID, bypassCache: Boolean = false): String {
         // Check if uuid is already cached
         if (!bypassCache && uuid in UUIDsToNames) {
             return UUIDsToNames[uuid]!!
         } else {
-            val json = connectionHandler.readJSON("https://api.ashcon.app/mojang/v2/user/$uuid")
-            if (json.has("error")) {
-                throw AshconException(json)
+            val name = getMojangPlayerSync(uuid.toString()).username
+            if (cacheNames) {
+                // Cache to both hashmaps
+                namesToUUIDs[name] = uuid
+                UUIDsToNames[uuid] = name
             }
-            val name = AshconPlayer(json).username
-            // Cache to both hashmaps
-            namesToUUIDs[name] = uuid
-            UUIDsToNames[uuid] = name
             return name
         }
     }
 
     /**
-     * Get a players UUID with their username via Mojang API
+     * Get a players UUID with their username via Electroid's API
      *
      * @param name The player's username
      * @return The player's UUID
@@ -111,19 +141,23 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
         getUUIDSync(name, bypassCache)
     }.launch()
 
+    /**
+     * Get a players UUID with their username via Electroid's API synchronously
+     *
+     * @param name The player's username
+     * @return The player's UUID
+     */
     fun getUUIDSync(name: String, bypassCache: Boolean = false): UUID {
         // Check if name is already cached
         if (!bypassCache && name in namesToUUIDs) {
             return namesToUUIDs[name]!!
         } else {
-            val json = connectionHandler.readJSON("https://api.ashcon.app/mojang/v2/user/$name")
-            if (json.has("error")) {
-                throw AshconException(json)
+            val uuid = getMojangPlayerSync(name).uuid
+            if (cacheNames) {
+                // Cache to both hashmaps
+                namesToUUIDs[name] = uuid
+                UUIDsToNames[uuid] = name
             }
-            val uuid = AshconPlayer(json).uuid
-            // Cache to both hashmaps
-            namesToUUIDs[name] = uuid
-            UUIDsToNames[uuid] = name
             return uuid
         }
     }
