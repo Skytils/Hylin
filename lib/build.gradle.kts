@@ -34,9 +34,9 @@ plugins {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "skytils.hylin"
-            artifactId = "library"
-            version = "0.1"
+            groupId = "com.github.Skytils"
+            artifactId = "Hylin"
+            version = "LOCAL"
 
             from(components["java"])
         }
