@@ -8,6 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: badasintended/autojitpack@v1
+      - uses: web3j/substr-action@e448c146620c370c177a13787abc1d21712a1440
+        id: jitpackhash
         with:
-          version: ${{ github.sha }}
+          value: ${{ github.sha }}
+          start: 0
+          length: 10
+      - uses: badasintended/autojitpack@07e74255c2fe5f3353477da9ee7b5767a87d390c
+        with:
+          version: ${{ steps.jitpackhash.outputs.result }}
