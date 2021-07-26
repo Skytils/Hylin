@@ -53,11 +53,11 @@ class Player(json: JsonObject) {
         return@lazy EnumChatFormatting.getValueByName(monthlyRankColor ?: "GOLD")
     }
     val rank by lazy {
-        val packageRank by player.byEnum("newPackageRank", PackageRank::class)
+        val packageRank: PackageRank? by player.byEnum("newPackageRank", PackageRank::class)
         if (packageRank == PackageRank.MVP_PLUS && monthlyPackageRank == MonthlyPackageRank.SUPERSTAR) {
             return@lazy PackageRank.MVP_PLUS_PLUS
         }
-        return@lazy packageRank
+        return@lazy packageRank ?: PackageRank.NONE
     }
     val rankPrefix by lazy {
         val prefix: String? by player.byString()
