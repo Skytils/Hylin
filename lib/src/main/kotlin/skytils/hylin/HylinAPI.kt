@@ -20,11 +20,7 @@ package skytils.hylin
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import skytils.hylin.extension.converter.byExternal
-import skytils.hylin.extension.getArray
-import skytils.hylin.extension.getJsonObject
-import skytils.hylin.extension.getString
-import skytils.hylin.extension.toUUID
+import skytils.hylin.extension.*
 import skytils.hylin.guild.Guild
 import skytils.hylin.mojang.AshconException
 import skytils.hylin.mojang.AshconPlayer
@@ -32,6 +28,7 @@ import skytils.hylin.player.OnlineStatus
 import skytils.hylin.request.*
 import skytils.hylin.skyblock.Profile
 import skytils.hylin.player.Player
+import skytils.hylin.skyblock.Member
 import java.util.*
 import kotlin.jvm.Throws
 
@@ -222,6 +219,88 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
      * @return A list of the player's skyblock profiles
      */
     fun getSkyblockProfilesSync(name: String): List<Profile> = getSkyblockProfilesSync(getUUIDSync(name))
+
+    /**
+     * Gets a player's latest played skyblock profile with their UUID
+     *
+     * @param uuid the UUID of a player
+     * @return The latest played skyblock profile
+     */
+    fun getLatestSkyblockProfile(uuid: UUID) = AsyncRequest(scope) {
+        getLatestSkyblockProfileSync(uuid)
+    }.launch()
+
+    /**
+     * Gets a player's latest played skyblock profile with their name
+     *
+     * @param name the username of a player
+     * @return The latest played skyblock profile
+     */
+    fun getLatestSkyblockProfile(name: String) = AsyncRequest(scope) {
+        getLatestSkyblockProfileSync(getUUIDSync(name))
+    }.launch()
+
+    /**
+     * Gets a player's latest played skyblock profile with their UUID synchronously
+     *
+     * @param uuid the UUID of a player
+     * @return The latest played skyblock profile
+     */
+    fun getLatestSkyblockProfileSync(uuid: UUID): Profile? {
+        return getSkyblockProfilesSync(uuid).maxByOrNull {
+            it.members[uuid.nonDashedString()]?.lastSave?.time ?: 0L
+        }
+    }
+
+    /**
+     * Gets a player's latest played skyblock profile with their name
+     *
+     * @param uuid the username of a player
+     * @return The latest played skyblock profile
+     */
+    fun getLatestSkyblockProfileSync(name: String): Profile? = getLatestSkyblockProfileSync(getUUIDSync(name))
+
+    /**
+     * Gets the member object from a player's latest played skyblock profile
+     * with their UUID
+     *
+     * @param uuid the UUID of a player
+     * @return Their member object from their latest played skyblock profile
+     */
+    fun getLatestSkyblockProfileForMember(uuid: UUID) = AsyncRequest(scope) {
+        getLatestSkyblockProfileForMemberSync(uuid)
+    }.launch()
+
+    /**
+     * Gets the member object from a player's latest played skyblock profile
+     * with their username
+     *
+     * @param name the username of a player
+     * @return Their member object from their latest played skyblock profile
+     */
+    fun getLatestSkyblockProfileForMember(name: String) = AsyncRequest(scope) {
+        getLatestSkyblockProfileForMemberSync(getUUIDSync(name))
+    }.launch()
+
+    /**
+     * Gets the member object from a player's latest played skyblock profile
+     * with their UUID synchronously
+     *
+     * @param uuid the UUID of a player
+     * @return Their member object from their latest played skyblock profile
+     */
+    fun getLatestSkyblockProfileForMemberSync(uuid: UUID): Member? {
+        return getLatestSkyblockProfileSync(uuid)?.members?.get(uuid.nonDashedString())
+    }
+
+    /**
+     * Gets the member object from a player's latest played skyblock profile
+     * with their username synchronously
+     *
+     * @param name the username of a player
+     * @return Their member object from their latest played skyblock profile
+     */
+    fun getLatestSkyblockProfileForMemberSync(name: String) = getLatestSkyblockProfileForMemberSync(getUUIDSync(name))
 
     /**
      * Get the current online status of a player
