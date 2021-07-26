@@ -20,16 +20,20 @@ package skytils.hylin
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import skytils.hylin.extension.converter.byExternal
 import skytils.hylin.extension.getArray
 import skytils.hylin.extension.getJsonObject
 import skytils.hylin.extension.getString
 import skytils.hylin.extension.toUUID
 import skytils.hylin.guild.Guild
+import skytils.hylin.mojang.AshconException
+import skytils.hylin.mojang.AshconPlayer
 import skytils.hylin.player.OnlineStatus
 import skytils.hylin.request.*
 import skytils.hylin.skyblock.Profile
 import skytils.hylin.player.Player
 import java.util.*
+import kotlin.jvm.Throws
 
 
 /**
@@ -37,24 +41,26 @@ import java.util.*
  *
  * @param key A Hypixel API key
  */
-class HylinAPI private constructor(var key: String, val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)) {
+class HylinAPI private constructor(var key: String, private val cacheNames: Boolean = true, val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)) {
 
     companion object {
 
         /**
          * Extension function for a CoroutineScope to create a new Hylin API inside of it
          * @param key A Hypixel API key
+         * @param cacheNames Whether or not to cache username to UUID conversions
          * @return A HypixelAPI instance
          */
-        fun CoroutineScope.createHylinAPI(key: String): HylinAPI =
-            HylinAPI(key, this)
+        fun CoroutineScope.createHylinAPI(key: String, cacheNames: Boolean = true): HylinAPI =
+            HylinAPI(key, cacheNames, this)
 
         /**
          * Function for creating a new Hylin API
          * @param key A Hypixel API key
+         * @param cacheNames Whether or not to cache username to UUID conversions
          * @return A HypixelAPI instance
          */
-        fun createHylinAPI(key: String): HylinAPI = HylinAPI(key)
+        fun createHylinAPI(key: String, cacheNames: Boolean = true): HylinAPI = HylinAPI(key, cacheNames)
 
         const val endpoint = "https://api.hypixel.net"
     }
@@ -62,6 +68,14 @@ class HylinAPI private constructor(var key: String, val scope: CoroutineScope = 
     internal val connectionHandler = ConnectionHandler()
     internal val namesToUUIDs = hashMapOf<String, UUID>()
     internal val UUIDsToNames = hashMapOf<UUID, String>()
+
+    /**
+     * Clears the username to UUID conversion cache
+     */
+    fun clearConversionCache() {
+        namesToUUIDs.clear()
+        UUIDsToNames.clear()
+    }
 
     /**
      * Get a players username with their UUID via Mojang API
@@ -73,13 +87,16 @@ class HylinAPI private constructor(var key: String, val scope: CoroutineScope = 
         getNameSync(uuid)
     }.launch()
 
-    fun getNameSync(uuid: UUID): String {
+    fun getNameSync(uuid: UUID, bypassCache: Boolean = false): String {
         // Check if uuid is already cached
-        if (uuid in UUIDsToNames) {
+        if (!bypassCache && uuid in UUIDsToNames) {
             return UUIDsToNames[uuid]!!
         } else {
-            val name =
-                connectionHandler.readJSON("https://sessionserver.mojang.com/session/minecraft/profile/$uuid")["name"].asString
+            val json = connectionHandler.readJSON("https://api.ashcon.app/mojang/v2/user/$uuid")
+            if (json.has("error")) {
+                throw AshconException(json)
+            }
+            val name = AshconPlayer(json).username
             // Cache to both hashmaps
             namesToUUIDs[name] = uuid
             UUIDsToNames[uuid] = name
@@ -93,17 +110,20 @@ class HylinAPI private constructor(var key: String, val scope: CoroutineScope = 
      * @param name The player's username
      * @return The player's UUID
      */
-    fun getUUID(name: String) = AsyncRequest(scope) {
-        getUUIDSync(name)
+    fun getUUID(name: String, bypassCache: Boolean = false) = AsyncRequest(scope) {
+        getUUIDSync(name, bypassCache)
     }.launch()
 
-    fun getUUIDSync(name: String): UUID {
+    fun getUUIDSync(name: String, bypassCache: Boolean = false): UUID {
         // Check if name is already cached
-        if (name in namesToUUIDs) {
+        if (!bypassCache && name in namesToUUIDs) {
             return namesToUUIDs[name]!!
         } else {
-            val uuid =
-                connectionHandler.readJSON("https://api.mojang.com/users/profiles/minecraft/$name")["id"].asString.toUUID()
+            val json = connectionHandler.readJSON("https://api.ashcon.app/mojang/v2/user/$name")
+            if (json.has("error")) {
+                throw AshconException(json)
+            }
+            val uuid = AshconPlayer(json).uuid
             // Cache to both hashmaps
             namesToUUIDs[name] = uuid
             UUIDsToNames[uuid] = name

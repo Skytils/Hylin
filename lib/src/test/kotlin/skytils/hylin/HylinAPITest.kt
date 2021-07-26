@@ -34,13 +34,13 @@ class HylinAPITest {
     @Test
     fun getName() = runBlocking {
         val api = createHylinAPI(testKey)
-        assertEquals(api.getUUIDSync("skyf"), "7c86a219-cdab-49a9-bd44-e34279bd590b".toUUID())
+        assertEquals("skyf", api.getNameSync("7c86a219-cdab-49a9-bd44-e34279bd590b".toUUID()))
     }
 
     @Test
     fun getUUID() = runBlocking {
         val api = createHylinAPI(testKey)
-        assertEquals(api.getNameSync("7c86a219-cdab-49a9-bd44-e34279bd590b".toUUID()), "skyf")
+        assertEquals("7c86a219-cdab-49a9-bd44-e34279bd590b".toUUID(), api.getUUIDSync("skyf"))
     }
 
     @Test
@@ -81,7 +81,7 @@ class HylinAPITest {
     @Test
     fun guildTest() {
         val api = createHylinAPI(testKey)
-        assertEquals(api.guildSync("skyf"), null)
+        assertEquals(null, api.guildSync("skyf"))
     }
 
     @Test
