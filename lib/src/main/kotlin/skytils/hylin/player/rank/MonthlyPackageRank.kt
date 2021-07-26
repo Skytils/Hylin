@@ -19,5 +19,6 @@
 package skytils.hylin.player.rank
 
 enum class MonthlyPackageRank {
-    SUPERSTAR
+    SUPERSTAR,
+    NONE
 }

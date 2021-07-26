@@ -28,9 +28,8 @@ import skytils.hylin.player.OnlineStatus
 import skytils.hylin.player.Player
 import skytils.hylin.request.AsyncRequest
 import skytils.hylin.request.ConnectionHandler
-import skytils.hylin.skyblock.Profile
-import skytils.hylin.player.Player
 import skytils.hylin.skyblock.Member
+import skytils.hylin.skyblock.Profile
 import java.util.*
 
 
