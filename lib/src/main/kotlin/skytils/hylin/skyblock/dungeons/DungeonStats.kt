@@ -28,9 +28,11 @@ import skytils.hylin.extension.getJsonObject
 class DungeonStats(json: JsonObject) {
     val selectedClass : Dungeon.DungeonClass? by json.byEnum("selected_dungeon_class", Dungeon.DungeonClass::class)
     val firstTalks: List<String>? by json.byList<String>("dungeons_blah_blah")
-    val classExperiences: List<Class>? by lazy {
-        json["player_classes"].asJsonObject.entrySet().map {
-            Class(it.value.asJsonObject.byDouble("experience"), Dungeon.DungeonClass.valueOf(it.key))
+    val classExperiences: Map<Dungeon.DungeonClass, Double?>? by lazy {
+        if (!json.has("player_classes")) return@lazy null
+        return@lazy json["player_classes"].asJsonObject.entrySet().associate {
+            val experience: Double? by it.value.asJsonObject.byDouble("experience")
+            return@associate Dungeon.DungeonClass.valueOf(it.key) to experience
         }
     }
     val dungeons: Map<String, Dungeon> = dungeon(json.getJsonObject("dungeon_types"))

@@ -89,6 +89,12 @@ fun JsonObject.getLong(key: String): Long = this[key].asLong
  */
 fun JsonObject.getFloat(key: String): Float = this[key].asFloat
 
+/**
+ * Get a double with a key
+ * @param key Key/name of property
+ */
+fun JsonObject.getDouble(key: String): Double = this[key].asDouble
+
 
 /**
  * Get an array with a key
