@@ -20,7 +20,6 @@ package skytils.hylin
 
 import kotlinx.coroutines.runBlocking
 import skytils.hylin.HylinAPI.Companion.createHylinAPI
-import skytils.hylin.extension.getLatestProfileForMemberOrNull
 import skytils.hylin.extension.toUUID
 import java.io.File
 import java.util.*
