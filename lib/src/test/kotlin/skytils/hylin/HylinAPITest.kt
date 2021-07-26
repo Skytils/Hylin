@@ -29,7 +29,7 @@ import kotlin.test.assertEquals
 
 class HylinAPITest {
 
-    val testKey = "redacted"
+    val testKey = "3345e88a-09a1-4c5f-ad4b-7daa217ec391"
 
     @Test
     fun getName() = runBlocking {
@@ -88,8 +88,9 @@ class HylinAPITest {
     fun dungeonsTest() {
         val api = createHylinAPI(testKey)
 
+        val uuid = api.getUUIDSync("Sychic")
         println("Writing to file")
-        File("test.txt").writeText(api.getSkyblockProfilesSync("skyf").getLatestProfileForMemberOrNull(api.getUUIDSync("skyf"))?.dungeons.toString())
+        File("test.txt").writeText(api.getSkyblockProfilesSync(uuid).getLatestProfileForMemberOrNull(uuid)?.dungeons.toString())
         println("finished writing")
 
     }

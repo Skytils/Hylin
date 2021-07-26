@@ -33,16 +33,15 @@ class DungeonStats(json: JsonObject) {
             Class(it.value.asJsonObject.byDouble("experience"), Dungeon.DungeonClass.valueOf(it.key))
         }
     }
-    val dungeons: List<Dungeon> = dungeon(json.getJsonObject("dungeon_types"))
+    val dungeons: Map<String, Dungeon> = dungeon(json.getJsonObject("dungeon_types"))
 
-    fun dungeon(json: JsonObject): List<Dungeon> {
-        val res = json.entrySet().map {
-            if (it.key.startsWith("master_")) return@map null
+    fun dungeon(json: JsonObject): Map<String, Dungeon> {
+        val res = json.entrySet().filter { !it.key.startsWith("master_") }.associate {
             val masterKey = "master_${it.key}"
-            return@map Dungeon(
+            return@associate it.key to Dungeon(
                 json.getJsonObject(it.key),
                 if (json.has(masterKey)) json.getJsonObject(masterKey) else null)
-        }.toMutableList().filterNotNull()
+        }
         return res
     }
 
