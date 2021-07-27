@@ -30,6 +30,7 @@ import skytils.hylin.request.AsyncRequest
 import skytils.hylin.request.ConnectionHandler
 import skytils.hylin.skyblock.Member
 import skytils.hylin.skyblock.Profile
+import skytils.hylin.skyblock.bazaar.BazaarData
 import java.util.*
 
 
@@ -334,6 +335,26 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
      * @return Their member object from their latest played skyblock profile
      */
     fun getLatestSkyblockProfileForMemberSync(name: String) = getLatestSkyblockProfileForMemberSync(getUUIDSync(name))
+
+    /**
+     * Gets the bazaar object from Skyblock
+     * This endpoint does not require an API key
+     *
+     * @return The bazaar data
+     */
+    fun getBazaarData() = AsyncRequest(scope) {
+        getBazaarDataSync()
+    }.launch()
+
+    /**
+     * Gets the bazaar object from Skyblock synchronously
+     * This endpoint does not require an API key
+     *
+     * @return The bazaar data
+     */
+    fun getBazaarDataSync(): BazaarData {
+        return BazaarData(connectionHandler.hypixelJSON("$endpoint/skyblock/bazaar"))
+    }
 
     /**
      * Get the current online status of a player

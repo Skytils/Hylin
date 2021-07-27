@@ -90,6 +90,14 @@ class HylinAPITest {
         println("Writing to file")
         File("test.txt").writeText(api.getLatestSkyblockProfileForMemberSync("skyf")?.dungeons.toString())
         println("finished writing")
+    }
 
+    @Test
+    fun bazaarTest() {
+        val api = createHylinAPI(testKey)
+
+        println("Writing to file")
+        File("test.txt").writeText(api.getBazaarDataSync().toString())
+        println("finished writing")
     }
 }
