@@ -77,6 +77,6 @@ Hylin currently supports a large portion of the skyblock API and regular player 
 [GNU AGPL 3.0](https://github.com/Skytils/Hylin/blob/master/LICENSE.md)
 
 ## Original Project & License
-[ryanhcode's KoPixel](https://github.com/ryanhcode/Hylin)
+[ryanhcode's KoPixel](https://github.com/ryanhcode/KoPixel)
 
 [MIT](https://choosealicense.com/licenses/mit/)
