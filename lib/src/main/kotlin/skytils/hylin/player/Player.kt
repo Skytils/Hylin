@@ -76,11 +76,11 @@ class Player(json: JsonObject) {
         }
     }
 
-    val networkXP by player.byInt("networkExp")
+    val networkXP by player.byDouble("networkExp")
     val achievementPoints by player.byInt("achievementPoints")
     val achievements by player.byMap<Int>()
     val achievementsOneTime by player.byList<String>()
-    val karma by player.byInt("karma")
+    val karma by player.byDouble("karma")
 
     val mcVersionRp by player.byString()
     val petConsumables by player.byMap<Int>()
