@@ -58,11 +58,11 @@ internal inline fun <reified T> JsonObject.byList(key: String? = null) = JsonPro
     }.toList()
 }
 
-internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null) = JsonPropertyDelegate(this, key) {
+internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null, crossinline isValid: (Map.Entry<String, JsonElement>) -> Boolean = { true }) = JsonPropertyDelegate(this, key) {
     val map = mutableMapOf<String, T>()
-    it.asJsonObject.entrySet().forEach { entry ->
-        val constructor: Constructor<*> = T::class.java.getConstructor(JsonObject::class.java)
-            ?: error("External map's generics must have a proper constructor")
+    val constructor: Constructor<*> = T::class.java.getConstructor(JsonObject::class.java)
+        ?: error("External map's generics must have a proper constructor")
+    it.asJsonObject.entrySet().filter(isValid).forEach { entry ->
         map[entry.key] = constructor.newInstance(entry.value) as T
     }
     map.toMap()
