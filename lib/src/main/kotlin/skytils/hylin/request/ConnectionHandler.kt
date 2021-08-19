@@ -22,13 +22,11 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import com.google.gson.JsonParser
 import com.google.gson.JsonSyntaxException
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.impl.client.HttpClients
+import org.apache.http.util.EntityUtils
 import skytils.hylin.extension.getBoolean
 import skytils.hylin.extension.getString
-import java.io.InputStreamReader
-import java.io.Reader
-import java.net.HttpURLConnection
-import java.net.URL
-import java.util.zip.GZIPInputStream
 
 
 /**
@@ -45,17 +43,17 @@ class ConnectionHandler {
      * @return A JsonObject of the parsed result
      */
     fun readJSON(endpoint: String): JsonObject {
-        val url = URL(endpoint)
-        val con: HttpURLConnection = url.openConnection() as HttpURLConnection
-        con.setRequestProperty("Accept-Encoding", "gzip")
-        val reader: Reader = if ("gzip" == con.contentEncoding) {
-            InputStreamReader(GZIPInputStream(con.inputStream), Charsets.UTF_8)
-        } else {
-            InputStreamReader(con.inputStream, Charsets.UTF_8)
-        }
-
         try {
-            return parser.parse(reader).asJsonObject
+            return parser.parse(HttpClients.createDefault().use {
+                HttpGet(endpoint).run {
+                    addHeader("User-Agent", "Hylin/1.0.0")
+                    it.execute(this)
+                }.use {
+                    EntityUtils.toString(it.entity, Charsets.UTF_8).apply {
+                        EntityUtils.consume(it.entity)
+                    }
+                }
+            }).asJsonObject
         } catch (e: JsonParseException) {
             error("Error caught during JSON parsing from \"$endpoint\"")
         } catch (e: JsonSyntaxException) {
