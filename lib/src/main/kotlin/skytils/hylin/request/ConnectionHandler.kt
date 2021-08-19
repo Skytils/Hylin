@@ -57,9 +57,9 @@ class ConnectionHandler {
         try {
             return parser.parse(reader).asJsonObject
         } catch (e: JsonParseException) {
-            error("Error caught during JSON parsing from \"${skytils.hylin.HylinAPI.endpoint}/$endpoint\"")
+            error("Error caught during JSON parsing from \"$endpoint\"")
         } catch (e: JsonSyntaxException) {
-            error("Error caught in JSON syntax from \"${skytils.hylin.HylinAPI.endpoint}/$endpoint\"")
+            error("Error caught in JSON syntax from \"$endpoint\"")
         }
     }
 
