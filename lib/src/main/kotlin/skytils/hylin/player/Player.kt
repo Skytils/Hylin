@@ -91,9 +91,8 @@ class Player(json: JsonObject) {
      * Checks if this player is online
      * @return If the player is online or not
      */
-    fun online(): Boolean {
-        return lastLogin > lastLogout
-    }
+    val online: Boolean
+        get() = lastLogin > lastLogout
 
     override fun toString(): String {
         return "Player(\n" +
