@@ -46,6 +46,7 @@ class Member(val json: JsonObject) {
     val slayers by json.byExternal<Slayers>("slayer_bosses")
     val skills by lazy { Skills(json) }
     val unlockedCollections: List<String>? by json.byList("unlocked_coll_tiers")
+    val jacob: Jacob by json.byExternal("jacob2")
 
     val dungeons by json.byExternal<DungeonStats>("dungeons")
 

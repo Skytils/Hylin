@@ -43,6 +43,14 @@ class HylinAPITest {
     }
 
     @Test
+    fun testJacob() = runBlocking {
+        val api = createHylinAPI(testKey)
+
+        val member = api.getLatestSkyblockProfileForMemberSync("ujc")!!
+        println(member.jacob)
+    }
+
+    @Test
     fun getSkyblockProfilesTime() = runBlocking {
         val api = createHylinAPI(testKey)
         val prevTime = System.currentTimeMillis()
