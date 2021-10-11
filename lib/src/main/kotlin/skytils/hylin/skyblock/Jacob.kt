@@ -27,6 +27,7 @@ class Jacob(json:JsonObject) {
     val medals: Medals by json.byExternal<Medals>("medals_inv")
     val perks: Perks by json.byExternal<Perks>()
     val contests: List<Contest> by lazy {
+        if (json["contest"] == null) return@lazy listOf()
         json.getJsonObject("contests").entrySet().map {
             val dateAndItem = it.key.split(':').also { arr ->
                 (arr as MutableList).add(2, arr[1].substringAfter('_'))
