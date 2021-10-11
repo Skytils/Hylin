@@ -32,19 +32,23 @@ import kotlin.reflect.KProperty
  */
 
 internal inline fun <reified T> JsonObject.byExternal(key: String? = null) = this.byConverter<T>(key)
+internal inline fun <reified T> JsonObject.byExternal(key: String? = null, default: T = null as T) =
+    this.byConverter<T>(key, default)
 internal inline fun <reified T> JsonObject.byConverter(key: String? = null) =
     JsonConverterDelegate<T>(T::class, this, key)
+internal inline fun <reified T> JsonObject.byConverter(key: String? = null, default: T = null as T) =
+    JsonConverterDelegate<T>(T::class, this, key, default)
 
-internal fun JsonObject.byString(key: String? = null) = JsonPropertyDelegate(this, key) { it.asString }
-internal fun JsonObject.byUUID(key: String? = null) = JsonPropertyDelegate(this, key) { it.asString.toUUID() }
-internal fun JsonObject.byInt(key: String? = null) = JsonPropertyDelegate(this, key) { it.asInt }
-internal fun JsonObject.byFloat(key: String? = null) = JsonPropertyDelegate(this, key) { it.asFloat }
-internal fun JsonObject.byDouble(key: String? = null) = JsonPropertyDelegate(this, key) { it.asDouble }
-internal fun JsonObject.byBoolean(key: String? = null) = JsonPropertyDelegate(this, key) { it.asBoolean }
-internal fun JsonObject.byLong(key: String? = null) = JsonPropertyDelegate(this, key) { it.asLong }
-internal fun JsonObject.byDate(key: String? = null) = JsonPropertyDelegate(this, key) { Date(it.asLong) }
+internal fun JsonObject.byString(key: String? = null) = JsonPropertyDelegate(this, key, "") { it.asString }
+internal fun JsonObject.byUUID(key: String? = null) = JsonPropertyDelegate(this, key, UUID.randomUUID()) { it.asString.toUUID() }
+internal fun JsonObject.byInt(key: String? = null) = JsonPropertyDelegate(this, key, 0) { it.asInt }
+internal fun JsonObject.byFloat(key: String? = null) = JsonPropertyDelegate(this, key, 0f) { it.asFloat }
+internal fun JsonObject.byDouble(key: String? = null) = JsonPropertyDelegate(this, key, 0.0) { it.asDouble }
+internal fun JsonObject.byBoolean(key: String? = null) = JsonPropertyDelegate(this, key, false) { it.asBoolean }
+internal fun JsonObject.byLong(key: String? = null) = JsonPropertyDelegate(this, key, 0L) { it.asLong }
+internal fun JsonObject.byDate(key: String? = null) = JsonPropertyDelegate(this, key, Date(0L)) { Date(it.asLong) }
 
-internal inline fun <reified T> JsonObject.byExternalList(key: String? = null) = JsonPropertyDelegate(this, key) {
+internal inline fun <reified T> JsonObject.byExternalList(key: String? = null) = JsonPropertyDelegate(this, key, listOf()) {
     it.asJsonArray.map { element ->
         val constructor: Constructor<*> = T::class.java.getConstructor(JsonObject::class.java)
             ?: error("External lists's generics must have a proper constructor")
@@ -52,13 +56,13 @@ internal inline fun <reified T> JsonObject.byExternalList(key: String? = null) =
     }.toList()
 }
 
-internal inline fun <reified T> JsonObject.byList(key: String? = null) = JsonPropertyDelegate(this, key) {
+internal inline fun <reified T> JsonObject.byList(key: String? = null) = JsonPropertyDelegate(this, key, listOf()) {
     it.asJsonArray.map { element ->
         element.getWithGeneric<T>(T::class)
     }.toList()
 }
 
-internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null, crossinline isValid: (Map.Entry<String, JsonElement>) -> Boolean = { true }) = JsonPropertyDelegate(this, key) {
+internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null, crossinline isValid: (Map.Entry<String, JsonElement>) -> Boolean = { true }) = JsonPropertyDelegate(this, key, mapOf()) {
     val map = mutableMapOf<String, T>()
     val constructor: Constructor<*> = T::class.java.getConstructor(JsonObject::class.java)
         ?: error("External map's generics must have a proper constructor")
@@ -68,26 +72,27 @@ internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null, cr
     map.toMap()
 }
 
-internal inline fun <reified T> JsonObject.byMap(key: String? = null) = JsonPropertyDelegate(this, key) { element ->
+internal inline fun <reified T> JsonObject.byMap(key: String? = null) = JsonPropertyDelegate(this, key, mapOf()) { element ->
     element.asJsonObject.entrySet().associate {
         it.key to it.value.getWithGeneric(T::class) as T
     }
 }
 
 internal fun <T : Enum<T>> JsonObject.byEnum(key: String? = null, klazz: KClass<out Enum<T>>) =
-    JsonPropertyDelegate<T>(this, key) { java.lang.Enum.valueOf(klazz.java, it.asString) as T }
+    JsonPropertyDelegate(this, key, klazz.java.enumConstants[0] as T) { java.lang.Enum.valueOf(klazz.java, it.asString) as T }
 
 @Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
 class JsonPropertyDelegate<T>(
     private val json: JsonObject,
     private val key: String?,
+    private val default: T = null as T,
     private val lambda: (JsonElement) -> T
 ) {
     private var value: T? = null
     operator fun getValue(thisRef: Any?, prop: KProperty<*>): T {
         if (value != null) return value as T
         val trueKey = key ?: prop.name
-        if ((!json.has(trueKey) && prop.returnType.isMarkedNullable) || json.get(trueKey).isJsonNull) return null as T
+        if ((!json.has(trueKey) && prop.returnType.isMarkedNullable) || json.get(trueKey) == null || json.get(trueKey).isJsonNull) return default
         val ret = lambda(json.get(trueKey))
         value = ret
         return ret
@@ -98,12 +103,12 @@ class JsonPropertyDelegate<T>(
 
 
 @Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
-class JsonConverterDelegate<T>(private val klazz: KClass<*>, val json: JsonObject, private val key: String?) {
+class JsonConverterDelegate<T>(private val klazz: KClass<*>, val json: JsonObject, private val key: String?, private val default: T = null as T) {
     private var value: T? = null
     operator fun getValue(thisRef: Any?, prop: KProperty<*>): T {
         if (value != null) return value as T
         val trueKey = key ?: prop.name
-        if ((!json.has(trueKey) && prop.returnType.isMarkedNullable) || json.get(trueKey) == null || json.get(trueKey).isJsonNull) return null as T
+        if ((!json.has(trueKey) && prop.returnType.isMarkedNullable) || json.get(trueKey) == null || json.get(trueKey).isJsonNull) return default
         val constructor: Constructor<out Any> = klazz.java.getConstructor(JsonObject::class.java)
             ?: error("byExternal cannot be used on classes without a constructor taking a JsonObject")
         val inst = constructor.newInstance(json.getAsJsonObject(trueKey)) as T
