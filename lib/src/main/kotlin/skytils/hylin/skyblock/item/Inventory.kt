@@ -29,7 +29,7 @@ import java.util.*
 /**
  * Represents an inventory in skyblock as a list of NBT tags.
  */
-class Inventory(val name: String, var items: MutableList<InventoryItem> = mutableListOf<InventoryItem>()) {
+class Inventory(val name: String, var items: MutableList<InventoryItem?> = mutableListOf()) {
     constructor(json: JsonObject) : this("storage_backpack", json)
 
     constructor(name: String, data: JsonObject) : this(name, data.getString("data"))
@@ -44,11 +44,8 @@ class Inventory(val name: String, var items: MutableList<InventoryItem> = mutabl
         val list = tag.getTagList("i", Constants.NBT.TAG_COMPOUND)
         for (i in 0 until list.tagCount()) {
             val cmpndTag = list.getCompoundTagAt(i)
-            cmpndTag.keySet.forEach { item ->
-                cmpndTag.getTag(item)?.let { itTag ->
-                    if (itTag is NBTTagCompound) items.add(InventoryItem(itTag))
-                }
-            }
+            if (cmpndTag.hasNoTags()) items.add(null)
+            else items.add(InventoryItem(cmpndTag))
         }
     }
 
@@ -58,7 +55,7 @@ class Inventory(val name: String, var items: MutableList<InventoryItem> = mutabl
 
     inline fun forEveryItem(iterator: (InventoryItem) -> Unit) {
         items.forEach {
-            iterator(it)
+            if (it != null) iterator(it)
         }
     }
 }

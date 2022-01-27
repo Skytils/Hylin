@@ -18,12 +18,19 @@
 
 package skytils.hylin.skyblock.item
 
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.Constants
 import skytils.hylin.skyblock.SkyblockColors
 
-class InventoryItem(val tag: NBTTagCompound) {
-    override fun toString() = "Item($tag)"
+class InventoryItem(val itemTag: NBTTagCompound) {
+    override fun toString() = "Item($itemTag)"
+
+    val mcId by lazy { itemTag.getShort("id") }
+    val count by lazy { itemTag.getByte("Count") }
+    val damage by lazy { itemTag.getShort("Damage") }
+    val tag by lazy { itemTag.getCompoundTag("tag") }
+    val asMinecraft by lazy { ItemStack.loadItemStackFromNBT(itemTag) }
 
     val colorable
         get() = tag.getCompoundTag("display").hasKey("color", Constants.NBT.TAG_INT)
@@ -52,5 +59,4 @@ class InventoryItem(val tag: NBTTagCompound) {
         get() = runCatching {
             SkyblockColors.isExotic(id!!, color!!)
         }.getOrDefault(false)
-
 }
