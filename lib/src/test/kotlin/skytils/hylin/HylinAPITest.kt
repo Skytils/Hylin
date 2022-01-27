@@ -28,7 +28,7 @@ import kotlin.test.assertEquals
 
 class HylinAPITest {
 
-    val testKey = "redacted"
+    val testKey = System.getenv("HYPIXEL_KEY")
 
     @Test
     fun getName() = runBlocking {
