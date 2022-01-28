@@ -23,6 +23,7 @@ import skytils.hylin.extension.converter.*
 import skytils.hylin.extension.getJsonObject
 import skytils.hylin.skyblock.dungeons.DungeonStats
 import skytils.hylin.skyblock.item.Inventory
+import skytils.hylin.skyblock.mining.HOTM
 import skytils.hylin.skyblock.misc.Griffin
 import skytils.hylin.skyblock.slayer.Slayers
 
@@ -47,6 +48,7 @@ class Member(val json: JsonObject) {
     val skills by lazy { Skills(json) }
     val unlockedCollections: List<String>? by json.byList("unlocked_coll_tiers")
     val jacob: Jacob by json.byExternal("jacob2")
+    val hotm by json.byExternal<HOTM>("mining_core")
 
     val dungeons by json.byExternal<DungeonStats>("dungeons")
 
