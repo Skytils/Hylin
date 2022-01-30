@@ -22,6 +22,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
+import net.minecraft.item.EnumDyeColor
 import net.minecraft.item.ItemStack
 import skytils.hylin.extension.converter.*
 import skytils.hylin.extension.getJsonObject
@@ -54,8 +55,8 @@ class HOTM(json: JsonObject) {
 
                 override fun getItem(level: Int): ItemStack? {
                     return when (level) {
-                        0 -> ItemStack(Blocks.bedrock)
-                        else -> ItemStack(Blocks.redstone_block, level)
+                        0 -> ItemStack(Blocks.bedrock).setStackDisplayName("§c${name}")
+                        else -> ItemStack(Blocks.redstone_block, level).setStackDisplayName("§${if (level == maxLevel) 'a' else 'c'}${name}")
                     }
                 }
             }
@@ -87,8 +88,8 @@ class HOTM(json: JsonObject) {
             override fun getItem(level: Int): ItemStack? {
                 return when (level) {
                     this.maxLevel -> ItemStack(Items.diamond, level)
-                    0 -> ItemStack(Items.coal)
-                    else -> ItemStack(Items.emerald, level)
+                    0 -> ItemStack(Items.coal).setStackDisplayName("§c${name}")
+                    else -> ItemStack(Items.emerald, level).setStackDisplayName("§c${name}")
                 }
             }
         }
@@ -100,8 +101,25 @@ class HOTM(json: JsonObject) {
 
             override fun getItem(level: Int): ItemStack? {
                 return when (level) {
-                    0 -> ItemStack(Blocks.coal_block)
-                    else -> ItemStack(Blocks.emerald_block, level)
+                    0 -> ItemStack(Blocks.coal_block).setStackDisplayName("§c${name}")
+                    else -> ItemStack(Blocks.emerald_block, level).setStackDisplayName("§a${name}")
+                }
+            }
+        }
+        sealed class HOTMLevel(val hotmLevel: Int) : HOTMSlot("hotm_tier_${hotmLevel}", "Tier $hotmLevel", (9 * 7) - ((hotmLevel - 1) * 9)) {
+            object Tier1 : HOTMLevel(1)
+            object Tier2 : HOTMLevel(2)
+            object Tier3 : HOTMLevel(3)
+            object Tier4 : HOTMLevel(4)
+            object Tier5 : HOTMLevel(5)
+            object Tier6 : HOTMLevel(6)
+            object Tier7 : HOTMLevel(7)
+
+            override fun getItem(level: Int): ItemStack? {
+                return when {
+                    level == -1 -> ItemStack(Blocks.stained_glass_pane, hotmLevel, EnumDyeColor.YELLOW.metadata).setStackDisplayName("§e${name}")
+                    level >= hotmLevel -> ItemStack(Blocks.stained_glass_pane, hotmLevel, EnumDyeColor.LIME.metadata).setStackDisplayName("§a${name}")
+                    else -> ItemStack(Blocks.stained_glass_pane, hotmLevel, EnumDyeColor.RED.metadata).setStackDisplayName("§c${name}")
                 }
             }
         }
