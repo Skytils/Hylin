@@ -19,7 +19,12 @@
 package skytils.hylin.skyblock.mining
 
 import com.google.gson.JsonObject
+import com.google.gson.JsonPrimitive
+import net.minecraft.init.Blocks
+import net.minecraft.init.Items
+import net.minecraft.item.ItemStack
 import skytils.hylin.extension.converter.*
+import skytils.hylin.extension.getJsonObject
 import skytils.hylin.extension.getString
 
 class HOTM(json: JsonObject) {
@@ -34,19 +39,25 @@ class HOTM(json: JsonObject) {
     val lastHOTMReset by json.byDate("last_reset")
     val lastCrystalHollowsAccess by json.byDate("greater_mines_last_access")
     val selectedPickaxeAbility = HOTMSlot.slots.find { it.id == json.getString("selected_pickaxe_ability") }
-    private val nodes: Map<String, Any> by json.byMap("nodes")
-    val toggledPerks = nodes.filter { it.key.startsWith("toggle_") && it.value is Boolean }.entries.associate { entry ->
-        HOTMSlot.slots.find { entry.key.substringAfter("toggle_") == it.id }!! to entry.value as Boolean
+    val toggledPerks = json.getJsonObject("nodes").entrySet().filter { it.key.startsWith("toggle_") && it.value is JsonPrimitive && (it.value as JsonPrimitive).isBoolean }.associate { entry ->
+        HOTMSlot.slots.find { entry.key.substringAfter("toggle_") == it.id }!! to entry.value.asBoolean
     }
-    val perks = nodes.filter { it.value is Int && !it.key.startsWith("toggle_") }.entries.associate { entry ->
-        HOTMSlot.slots.find { entry.key == it.id }!! to entry.value as Int
+    val perks = json.getJsonObject("nodes").entrySet().filter { it.value is JsonPrimitive && (it.value as JsonPrimitive).isNumber && !it.key.startsWith("toggle_") }.associate { entry ->
+        HOTMSlot.slots.find { entry.key == it.id }!! to entry.value.asInt
     }
 
 
     sealed class HOTMSlot(val id: String, val name: String, val slotNum: Int) {
-        sealed class Perk(id: String, name: String, maxLevel: Int, slotNum: Int) : HOTMSlot(id, name, slotNum) {
+        sealed class Perk(id: String, name: String, val maxLevel: Int, slotNum: Int) : HOTMSlot(id, name, slotNum) {
             sealed class SpecialPerk(id: String, name: String, maxLevel: Int, slotNum: Int) : Perk(id, name, maxLevel, slotNum) {
                 object PeakOfTheMountain : SpecialPerk("special_0", "Peak of the Mountain", 5, 22)
+
+                override fun getItem(level: Int): ItemStack? {
+                    return when (level) {
+                        0 -> ItemStack(Blocks.bedrock)
+                        else -> ItemStack(Blocks.redstone_block, level)
+                    }
+                }
             }
             object MiningSpeed2 : Perk("mining_speed_2", "Mining Speed II", 50, 2)
             object PowderBuff : Perk("powder_buff", "Powder Buff", 50, 4)
@@ -72,13 +83,30 @@ class HOTM(json: JsonObject) {
             object MiningFortune : Perk("mining_fortune", "Mining Fortune", 50, 49)
             object QuickForge : Perk("forge_time", "Quick Forge", 20, 50)
             object MiningSpeed : Perk("mining_speed", "Mining Speed", 50, 58)
+
+            override fun getItem(level: Int): ItemStack? {
+                return when (level) {
+                    this.maxLevel -> ItemStack(Items.diamond, level)
+                    0 -> ItemStack(Items.coal)
+                    else -> ItemStack(Items.emerald, level)
+                }
+            }
         }
         sealed class PickaxeAbility(id: String, name: String, slotNum: Int) : HOTMSlot(id, name, slotNum) {
             object VeinSeeker : PickaxeAbility("vein_seeker", "Vein Seeker",  10)
             object ManiacMiner : PickaxeAbility("maniac_miner", "Maniac Miner", 16)
             object MiningSpeedBoost : PickaxeAbility("mining_speed_boost", "Mining Speed Boost", 47)
             object Pickobulus : PickaxeAbility("pickaxe_toss", "Pickobulus", 51)
+
+            override fun getItem(level: Int): ItemStack? {
+                return when (level) {
+                    0 -> ItemStack(Blocks.coal_block)
+                    else -> ItemStack(Blocks.emerald_block, level)
+                }
+            }
         }
+
+        abstract fun getItem(level: Int): ItemStack?
 
         companion object {
             val slots = hashSetOf<HOTMSlot>()
