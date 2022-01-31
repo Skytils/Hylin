@@ -54,7 +54,19 @@ class HOTM(json: JsonObject) {
         sealed class Perk(id: String, name: String, val maxLevel: Int, slotNum: Int) : HOTMSlot(id, name, slotNum) {
             sealed class SpecialPerk(id: String, name: String, maxLevel: Int, slotNum: Int) : Perk(id, name, maxLevel, slotNum) {
                 object PeakOfTheMountain : SpecialPerk("special_0", "Peak of the Mountain", 5, 22) {
-                    override fun getLore(level: Int): List<String> = listOf("I was too lazy to put the rewards here")
+                    override fun getLore(level: Int): List<String> = when (level) {
+                        5 -> listOf(
+                            "§7Level 5", "",
+                            "§8+§c1 Pickaxe Ability Level",
+                            "§8+§51 Token of the Mountain",
+                            "§8+§a1 Forge Slot",
+                            "§8+§a1 Commission Slot",
+                            "§8+§21 Mithril Powder §7when",
+                            "§7mining §fMithril",
+                            "§8+§51 Token of the Mountain"
+                        )
+                        else -> listOf("No text for this level!")
+                    }
                 }
 
                 override fun getItem(level: Int): ItemStack {
