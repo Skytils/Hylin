@@ -249,7 +249,10 @@ class HOTM(json: JsonObject) {
 
             init {
                 HOTMSlot::class.sealedSubclasses.flatMapTo(slots) { type ->
-                    type.sealedSubclasses.mapNotNull { item -> item.objectInstance }
+                    type.sealedSubclasses.mapNotNull { item ->
+                        if (item == Perk.SpecialPerk::class) return@mapNotNull Perk.SpecialPerk.PeakOfTheMountain
+                        item.objectInstance
+                    }
                 }
             }
         }
