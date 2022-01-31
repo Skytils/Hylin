@@ -43,6 +43,15 @@ class HylinAPITest {
     }
 
     @Test
+    fun testHOTM() = runBlocking {
+        println(testKey)
+        val api = createHylinAPI(testKey)
+
+        val member = api.getLatestSkyblockProfileForMemberSync("ujc")!!
+        println(member.hotm)
+    }
+
+    @Test
     fun testJacob() = runBlocking {
         val api = createHylinAPI(testKey)
 
