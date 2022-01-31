@@ -211,25 +211,50 @@ class HOTM(json: JsonObject) {
         }
         sealed class HOTMLevel(val hotmLevel: Int) : HOTMSlot("hotm_tier_${hotmLevel}", "Tier $hotmLevel", (9 * 7) - ((hotmLevel - 1) * 9)) {
             object Tier1 : HOTMLevel(1) {
-                override fun getLore(level: Int): List<String> = listOf("I was too lazy to put the rewards here")
+                override fun getLore(level: Int): List<String> = listOf(
+                    "§8+§51 Token of the Mountain"
+                )
             }
             object Tier2 : HOTMLevel(2) {
-                override fun getLore(level: Int): List<String> = listOf("I was too lazy to put the rewards here")
+                override fun getLore(level: Int): List<String> = listOf(
+                    "§8+§52 Tokens of the Mountain",
+                    "§6Access to the Forge",
+                    "§8+§6New Forgeable Items"
+                )
             }
             object Tier3 : HOTMLevel(3) {
-                override fun getLore(level: Int): List<String> = listOf("I was too lazy to put the rewards here")
+                override fun getLore(level: Int): List<String> = listOf(
+                    "§8+§52 Tokens of the Mountain",
+                    "§8+§a1 Forge Slot",
+                    "§8+§6New Forgeable Items",
+                    "§dAccess to the §5Crystal", "§5Hollows",
+                    "§6Emissary Braum §f- §bCrystal", "§bHollows"
+                )
             }
             object Tier4 : HOTMLevel(4) {
-                override fun getLore(level: Int): List<String> = listOf("I was too lazy to put the rewards here")
+                override fun getLore(level: Int): List<String> = listOf(
+                    "§8+§52 Tokens of the Mountain",
+                    "§8+§a1 Forge Slot",
+                    "§8+§6New Forgeable Items"
+                )
             }
             object Tier5 : HOTMLevel(5) {
-                override fun getLore(level: Int): List<String> = listOf("I was too lazy to put the rewards here")
+                override fun getLore(level: Int): List<String> = listOf(
+                    "§8+§52 Tokens of the Mountain",
+                    "§8+§6New Forgeable Items"
+                )
             }
             object Tier6 : HOTMLevel(6) {
-                override fun getLore(level: Int): List<String> = listOf("I was too lazy to put the rewards here")
+                override fun getLore(level: Int): List<String> = listOf(
+                    "§8+§52 Tokens of the Mountain",
+                    "§8+§6New Forgeable Items"
+                )
             }
             object Tier7 : HOTMLevel(7) {
-                override fun getLore(level: Int): List<String> = listOf("I was too lazy to put the rewards here")
+                override fun getLore(level: Int): List<String> = listOf(
+                    "§8+§52 Tokens of the Mountain",
+                    "§8+§6New Forgeable Items"
+                )
             }
 
             override fun getItem(level: Int): ItemStack {
