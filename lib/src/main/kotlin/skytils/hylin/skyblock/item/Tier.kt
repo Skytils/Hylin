@@ -24,6 +24,7 @@ enum class Tier {
     RARE,
     EPIC,
     LEGENDARY,
+    MYTHIC,
     SPECIAL,
-    SUPREME
+    DIVINE
 }
