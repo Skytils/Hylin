@@ -65,7 +65,7 @@ class HOTM(json: JsonObject) {
                             "§7mining §fMithril",
                             "§8+§51 Token of the Mountain"
                         )
-                        else -> listOf("§c    LOCKED    ")
+                        else -> listOf("§c            LOCKED            ")
                     }
                 }
 
