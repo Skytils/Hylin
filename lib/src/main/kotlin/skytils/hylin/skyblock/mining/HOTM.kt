@@ -26,7 +26,7 @@ import net.minecraft.item.EnumDyeColor
 import net.minecraft.item.ItemStack
 import skytils.hylin.extension.converter.*
 import skytils.hylin.extension.getJsonObject
-import skytils.hylin.extension.getString
+import skytils.hylin.extension.getOptionalString
 import skytils.hylin.extension.roundToPrecision
 import kotlin.math.*
 
@@ -41,7 +41,7 @@ class HOTM(json: JsonObject) {
     val gemstonePowder by json.byLong("powder_gemstone")
     val lastHOTMReset by json.byDate("last_reset")
     val lastCrystalHollowsAccess by json.byDate("greater_mines_last_access")
-    val selectedPickaxeAbility = HOTMSlot.slots.find { it.id == json.getString("selected_pickaxe_ability") }
+    val selectedPickaxeAbility = HOTMSlot.slots.find { it.id == json.getOptionalString("selected_pickaxe_ability") }
     val toggledPerks = json.getJsonObject("nodes").entrySet().filter { it.key.startsWith("toggle_") && it.value is JsonPrimitive && (it.value as JsonPrimitive).isBoolean }.associate { entry ->
         HOTMSlot.slots.find { entry.key.substringAfter("toggle_") == it.id }!! to entry.value.asBoolean
     }
