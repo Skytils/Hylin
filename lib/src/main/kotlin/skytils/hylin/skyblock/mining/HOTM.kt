@@ -65,7 +65,7 @@ class HOTM(json: JsonObject) {
                             "§7mining §fMithril",
                             "§8+§51 Token of the Mountain"
                         )
-                        else -> listOf("No text for this level!")
+                        else -> listOf("§c    LOCKED    ")
                     }
                 }
 
@@ -77,13 +77,13 @@ class HOTM(json: JsonObject) {
                 }
             }
             object MiningSpeed2 : Perk("mining_speed_2", "Mining Speed II", 50, 2) {
-                override fun getLore(level: Int) = listOf("§7Grants §a+${40 * level} §6⸕ Mining", "§6Speed§7.")
+                override fun getLore(level: Int) = listOf("§7Grants §a+${40 * level} §6⸕ Mining Speed§7.")
             }
             object PowderBuff : Perk("powder_buff", "Powder Buff", 50, 4) {
                 override fun getLore(level: Int) = listOf("§7Gain §a${level}% §7more Mithril", "§7Powder and Gemstone Powder.")
             }
             object MiningFortune2 : Perk("mining_fortune_2", "Mining Fortune II", 50, 6) {
-                override fun getLore(level: Int) = listOf("§7Grants §a+${5 * level} §6☘ Mining", "§6Fortune§7.")
+                override fun getLore(level: Int) = listOf("§7Grants §a+${5 * level} §6☘ Mining Fortune§7.")
             }
             object LonesomeMiner : Perk("lonesome_miner", "Lonesome Miner", 45, 11) {
                 override fun getLore(level: Int) = listOf("§7Increases §c❁ Strength, §9☣ Crit",
@@ -183,7 +183,7 @@ class HOTM(json: JsonObject) {
                 override fun getLore(level: Int) = listOf("§7When mining Mithril Ore, you", "§7have a §a${(2 + level * 0.1).roundToPrecision(1)}%§7 chance to", "§7convert the block into Titanium", "§7Ore.")
             }
             object MiningFortune : Perk("mining_fortune", "Mining Fortune", 50, 49) {
-                override fun getLore(level: Int) = listOf("§7Grants §a+${5 * level} §6☘ Mining", "§6Fortune§7.")
+                override fun getLore(level: Int) = listOf("§7Grants §a+${5 * level} §6☘ Mining Fortune§7.")
             }
             object QuickForge : Perk("forge_time", "Quick Forge", 20, 50) {
                 override fun getLore(level: Int): List<String> = listOf("§7Decreases the time it takes to", "§7forge by §a${if (level == maxLevel) 30 else (10 + 0.5 * level).roundToPrecision(1)}%§7.")
@@ -205,7 +205,7 @@ class HOTM(json: JsonObject) {
                 override fun getLore(level: Int) = listOf(
                     "§6Pickaxe Ability: Vein Seeker",
                     "§7Points in the direction of the nearest vein ",
-                    "and grants §a+${1 + level} §6Mining Spread §7for §a${10 + level * 2}s§7.",
+                    "§7and grants §a+${1 + level} §6Mining Spread §7for §a${10 + level * 2}s§7.",
                     "§8Cooldown: §a60s"
                 )
             }
@@ -214,7 +214,7 @@ class HOTM(json: JsonObject) {
                     "§6Pickaxe Ability: Maniac Miner",
                     "§7Spends all your Mana and grants",
                     "§a+[Some] §6⸕ Mining Speed §7for",
-                    "every 10 Mana spent, for §a${5 + level * 5}s§7.",
+                    "§7every 10 Mana spent, for §a${5 + level * 5}s§7.",
                     "§8Cooldown: §a${if (level <= 1) 60 else 59}s"
                 )
             }
