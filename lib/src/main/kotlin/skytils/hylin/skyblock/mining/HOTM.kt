@@ -194,9 +194,10 @@ class HOTM(json: JsonObject) {
 
             override fun getItem(level: Int): ItemStack {
                 return when (level) {
-                    this.maxLevel -> ItemStack(Items.diamond, level)
+                    maxLevel -> ItemStack(Items.diamond, level).setStackDisplayName("§a${name}")
                     0 -> ItemStack(Items.coal).setStackDisplayName("§c${name}")
-                    else -> ItemStack(Items.emerald, level).setStackDisplayName("§c${name}")
+                    // technically e should only be for upgradeable perks
+                    else -> ItemStack(Items.emerald, level).setStackDisplayName("§e${name}")
                 }
             }
         }
