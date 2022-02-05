@@ -24,7 +24,10 @@ import skytils.hylin.extension.converter.byExternalList
 import skytils.hylin.extension.converter.byInt
 import skytils.hylin.extension.converter.byList
 import skytils.hylin.extension.getJsonObject
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 open class DungeonBase(val json: JsonObject) {
     /**
      * This is not available on a master dungepn
@@ -37,9 +40,9 @@ open class DungeonBase(val json: JsonObject) {
     val completions: Map<Int, Long>? by json.byMapKeyed("tier_completions")
     val milestoneCompletions: Map<Int, Long>? by json.byMapKeyed("milestone_completions")
     val highestCompletion: Int? by json.byInt("highest_tier_completed")
-    val fastestTime: Map<Int, Long>? by json.byMapKeyed("fastest_time")
-    val fastestTimeS: Map<Int, Long>? by json.byMapKeyed("fastest_time_s")
-    val fastestTimeSPlus: Map<Int, Long>? by json.byMapKeyed("fastest_time_s_plus")
+    val fastestTime: Map<Int, Duration>? by json.byMapKeyed("fastest_time")
+    val fastestTimeS: Map<Int, Duration>? by json.byMapKeyed("fastest_time_s")
+    val fastestTimeSPlus: Map<Int, Duration>? by json.byMapKeyed("fastest_time_s_plus")
     val bestRuns = if (json.has("best_runs")) bestRuns(json.getJsonObject("best_runs")) else null
     val bestScores: Map<Int, Int>? by json.byMapKeyed("best_score")
     val mobsKilled: Map<Int, Int>? by json.byMapKeyed("mobs_killed")

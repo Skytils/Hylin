@@ -23,6 +23,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.util.*
 import kotlin.reflect.KClass
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
 /**
  * Get a JSON Primitive of type T
@@ -48,6 +50,7 @@ fun <T> JsonObject.getWithGeneric(key: String, clazz: KClass<*>): T {
  * Get this as a JSON Primitive of type T
  * @return This property of type T
  */
+@OptIn(ExperimentalTime::class)
 @Suppress("UNCHECKED_CAST")
 fun <T : Any> JsonElement.getWithGeneric(clazz: KClass<out T>): T {
     return when (clazz) {
@@ -60,6 +63,7 @@ fun <T : Any> JsonElement.getWithGeneric(clazz: KClass<out T>): T {
         Date::class -> Date(asLong) as T
         UUID::class -> asString.toUUID() as T
         JsonObject::class -> asJsonObject as T
+        Duration::class -> Duration.milliseconds(asLong) as T
         else -> error("Invalid generic")
     }
 }
