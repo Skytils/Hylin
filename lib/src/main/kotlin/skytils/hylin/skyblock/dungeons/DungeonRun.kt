@@ -34,7 +34,7 @@ class DungeonRun(json: JsonObject) {
         json.getInt("score_skill"),
         json.getInt("score_bonus")
     )
-    val dungeonClass by json.byEnum("dungeon_class", Dungeon.DungeonClass::class)
+    val dungeonClass by json.byEnum("dungeon_class", DungeonClass::class)
     val teammates by json.byList<String>("teammates")
     val timeElapsed by json.byLong("elapsed_time")
     val damageDealt: Double? by json.byDouble("damage_dealt")

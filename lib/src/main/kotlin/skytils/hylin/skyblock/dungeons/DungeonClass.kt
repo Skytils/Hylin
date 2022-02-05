@@ -1,6 +1,6 @@
 /*
  * Hylin - Hypixel API Wrapper in Kotlin
- * Copyright (C) 2021  Skytils
+ * Copyright (C) 2022  Skytils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -18,22 +18,22 @@
 
 package skytils.hylin.skyblock.dungeons
 
-import com.google.gson.JsonObject
-import skytils.hylin.extension.converter.byDouble
-import skytils.hylin.extension.converter.byExternal
-import skytils.hylin.extension.getJsonObject
-
-class Dungeon(json: JsonObject) {
-
-    constructor(normal: JsonObject?, master: JsonObject?) : this(JsonObject().also { it.add("normal", normal); it.add("master", master) })
-
-    val experience: Double? by json.getJsonObject("normal").byDouble("experience")
-    val normal: DungeonBase? by json.byExternal<DungeonBase>("normal")
-    val master: DungeonBase? by json.byExternal<DungeonBase>("master")
+enum class DungeonClass(val className: String) {
+    ARCHER("Archer"),
+    BERSERK("Berserk"),
+    MAGE("Mage"),
+    HEALER("Healer"),
+    TANK("Tank"),
+    EMPTY("Empty");
 
     override fun toString(): String {
-        return "XP: $experience\n" +
-                "Normal Stats: $normal\n" +
-                "Master Stats: $master"
+        return this.className
+    }
+
+    companion object {
+        fun getClassFromName(name: String): DungeonClass {
+            return values().find { it.className.lowercase() == name.lowercase() }
+                ?: throw IllegalArgumentException("No class could be found for the name $name")
+        }
     }
 }

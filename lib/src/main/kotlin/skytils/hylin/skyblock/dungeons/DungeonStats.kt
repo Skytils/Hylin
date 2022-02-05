@@ -26,13 +26,13 @@ import skytils.hylin.extension.converter.byList
 import skytils.hylin.extension.getJsonObject
 
 class DungeonStats(json: JsonObject) {
-    val selectedClass : Dungeon.DungeonClass? by json.byEnum("selected_dungeon_class", Dungeon.DungeonClass::class)
+    val selectedClass : DungeonClass? by json.byEnum("selected_dungeon_class", DungeonClass::class)
     val firstTalks: List<String>? by json.byList<String>("dungeons_blah_blah")
-    val classExperiences: Map<Dungeon.DungeonClass, Double?>? by lazy {
+    val classExperiences: Map<DungeonClass, Double?>? by lazy {
         if (!json.has("player_classes")) return@lazy null
         return@lazy json["player_classes"].asJsonObject.entrySet().associate {
             val experience: Double? by it.value.asJsonObject.byDouble("experience")
-            return@associate Dungeon.DungeonClass.valueOf(it.key) to experience
+            return@associate DungeonClass.valueOf(it.key) to experience
         }
     }
     val dungeons: Map<String, Dungeon> = dungeon(json.getJsonObject("dungeon_types"))
@@ -56,7 +56,7 @@ class DungeonStats(json: JsonObject) {
 
     // TODO add dungeon journals
 
-    data class Class(private val experienceIn : JsonPropertyDelegate<Double>, val Class: Dungeon.DungeonClass) {
+    data class Class(private val experienceIn : JsonPropertyDelegate<Double>, val Class: DungeonClass) {
         val experience : Double? by experienceIn
         override fun toString(): String {
             return "${Class.className}: $experience"

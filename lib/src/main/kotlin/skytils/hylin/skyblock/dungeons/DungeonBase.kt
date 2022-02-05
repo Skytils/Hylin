@@ -56,8 +56,8 @@ open class DungeonBase(val json: JsonObject) {
         }
     }
 
-    private fun getHighestDamages(json: JsonObject): Map<Dungeon.DungeonClass, Map<String, Double>> {
-        val res: Map<Dungeon.DungeonClass, Map<String, Double>> = Dungeon.DungeonClass.values().associate {
+    private fun getHighestDamages(json: JsonObject): Map<DungeonClass, Map<String, Double>> {
+        val res: Map<DungeonClass, Map<String, Double>> = DungeonClass.values().associate {
             if (!json.has("most_damage_${it.className}")) return@associate it to emptyMap<String, Double>()
             val a by json.byMap<Double>("most_damage_${it.className}")
             it to a
