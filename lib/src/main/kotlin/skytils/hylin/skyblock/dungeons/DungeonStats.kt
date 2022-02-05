@@ -32,7 +32,7 @@ class DungeonStats(json: JsonObject) {
         if (!json.has("player_classes")) return@lazy null
         return@lazy json["player_classes"].asJsonObject.entrySet().associate {
             val experience: Double? by it.value.asJsonObject.byDouble("experience")
-            return@associate DungeonClass.valueOf(it.key) to experience
+            return@associate DungeonClass.valueOf(it.key.uppercase()) to experience
         }
     }
     val dungeons: Map<String, Dungeon> = dungeon(json.getJsonObject("dungeon_types"))

@@ -85,7 +85,7 @@ internal inline fun <reified K : Any, reified V : Any> JsonObject.byMapKeyed(key
 }
 
 internal fun <T : Enum<T>> JsonObject.byEnum(key: String? = null, klazz: KClass<out Enum<T>>) =
-    JsonPropertyDelegate(this, key, klazz.java.enumConstants[0] as T) { java.lang.Enum.valueOf(klazz.java, it.asString) as T }
+    JsonPropertyDelegate(this, key, klazz.java.enumConstants[0] as T) { j -> klazz.java.enumConstants.find { it.name.equals(j.asString, true) } as T}
 
 @Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
 class JsonPropertyDelegate<T>(
