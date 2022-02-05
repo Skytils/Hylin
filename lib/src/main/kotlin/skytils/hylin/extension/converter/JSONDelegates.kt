@@ -56,9 +56,9 @@ internal inline fun <reified T> JsonObject.byExternalList(key: String? = null) =
     }.toList()
 }
 
-internal inline fun <reified T> JsonObject.byList(key: String? = null) = JsonPropertyDelegate(this, key, listOf()) {
+internal inline fun <reified T : Any> JsonObject.byList(key: String? = null) = JsonPropertyDelegate(this, key, listOf()) {
     it.asJsonArray.map { element ->
-        element.getWithGeneric<T>(T::class)
+        element.getWithGeneric(T::class)
     }.toList()
 }
 
@@ -72,9 +72,15 @@ internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null, cr
     map.toMap()
 }
 
-internal inline fun <reified T> JsonObject.byMap(key: String? = null) = JsonPropertyDelegate(this, key, mapOf()) { element ->
+internal inline fun <reified T : Any> JsonObject.byMap(key: String? = null) = JsonPropertyDelegate(this, key, mapOf()) { element ->
     element.asJsonObject.entrySet().associate {
-        it.key to it.value.getWithGeneric(T::class) as T
+        it.key to it.value.getWithGeneric(T::class)
+    }
+}
+
+internal inline fun <reified K : Any, reified V : Any> JsonObject.byMapKeyed(key: String? = null) = JsonPropertyDelegate(this, key, mapOf()) { element ->
+    element.asJsonObject.entrySet().associate {
+        it.key.getWithGeneric(K::class) to it.value.getWithGeneric(V::class)
     }
 }
 

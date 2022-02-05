@@ -49,7 +49,7 @@ fun <T> JsonObject.getWithGeneric(key: String, clazz: KClass<*>): T {
  * @return This property of type T
  */
 @Suppress("UNCHECKED_CAST")
-fun <T> JsonElement.getWithGeneric(clazz: KClass<*>): T {
+fun <T : Any> JsonElement.getWithGeneric(clazz: KClass<out T>): T {
     return when (clazz) {
         String::class -> asString as T
         Boolean::class -> asBoolean as T

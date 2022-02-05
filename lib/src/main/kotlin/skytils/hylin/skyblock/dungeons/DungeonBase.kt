@@ -25,27 +25,35 @@ import skytils.hylin.extension.converter.byInt
 import skytils.hylin.extension.converter.byList
 import skytils.hylin.extension.getJsonObject
 
-open class DungeonBase(json: JsonObject) {
-    val completions: Map<String, Int>? by json.byMap<Int>("tier_completions")
-    val milestoneCompletions: Map<String, Int>? by json.byMap<Int>("milestone_completions")
+open class DungeonBase(val json: JsonObject) {
+    /**
+     * This is not available on a master dungepn
+     */
+    val timesPlayed: Map<Int, Long>? by json.byMapKeyed("times_played")
+    /**
+     * This is not available on a master dungepn
+     */
+    val watcherKills: Map<Int, Long>? by json.byMapKeyed("watcher_kills")
+    val completions: Map<Int, Long>? by json.byMapKeyed("tier_completions")
+    val milestoneCompletions: Map<Int, Long>? by json.byMapKeyed("milestone_completions")
     val highestCompletion: Int? by json.byInt("highest_tier_completed")
-    val fastestTime: Map<String, Long>? by json.byMap<Long>("fastest_time")
-    val fastestTimeS: Map<String, Long>? by json.byMap<Long>("fastest_time_s")
-    val fastestTimeSPlus: Map<String, Long>? by json.byMap<Long>("fastest_time_s_plus")
+    val fastestTime: Map<Int, Long>? by json.byMapKeyed("fastest_time")
+    val fastestTimeS: Map<Int, Long>? by json.byMapKeyed("fastest_time_s")
+    val fastestTimeSPlus: Map<Int, Long>? by json.byMapKeyed("fastest_time_s_plus")
     val bestRuns = if (json.has("best_runs")) bestRuns(json.getJsonObject("best_runs")) else null
-    val bestScores: Map<String, Int>? by json.byMap<Int>("best_score")
-    val mobsKilled: Map<String, Int>? by json.byMap<Int>("mobs_killed")
+    val bestScores: Map<Int, Int>? by json.byMapKeyed("best_score")
+    val mobsKilled: Map<Int, Int>? by json.byMapKeyed("mobs_killed")
     val highestDamages by lazy { getHighestDamages(json) }
-    val mostHealing: Map<String, Double>? by json.byMap<Double>("most_healing")
+    val mostHealing: Map<Int, Double>? by json.byMapKeyed("most_healing")
 
-    fun bestRuns(json: JsonObject): Map<Int, List<DungeonRun>> {
+    private fun bestRuns(json: JsonObject): Map<Int, List<DungeonRun>> {
         return json.entrySet().associate {
             val list by json.byExternalList<DungeonRun>(it.key)
             it.key.toInt() to list
         }
     }
 
-    fun getHighestDamages(json: JsonObject): Map<Dungeon.DungeonClass, Map<String, Double>> {
+    private fun getHighestDamages(json: JsonObject): Map<Dungeon.DungeonClass, Map<String, Double>> {
         val res: Map<Dungeon.DungeonClass, Map<String, Double>> = Dungeon.DungeonClass.values().associate {
             if (!json.has("most_damage_${it.className}")) return@associate it to emptyMap<String, Double>()
             val a by json.byMap<Double>("most_damage_${it.className}")
