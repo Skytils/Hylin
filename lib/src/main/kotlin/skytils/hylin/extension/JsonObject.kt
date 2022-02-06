@@ -80,7 +80,7 @@ fun JsonObject.getString(key: String): String = this[key].asString
  * @param key Key/name of property
  * @param default fallback value, defaults to an empty string
  */
-fun JsonObject.getOptionalString(key: String, default: String = ""): String = this[key]?.asString ?: default
+fun JsonObject.getOptionalString(key: String, default: String = ""): String = this[key]?.let { if (it.isJsonNull) default else it.asString } ?: default
 
 /**
  * Get an int with a key
