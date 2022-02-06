@@ -39,16 +39,16 @@ internal inline fun <reified T> JsonObject.byConverter(key: String? = null) =
 internal inline fun <reified T> JsonObject.byConverter(key: String? = null, default: T = null as T) =
     JsonConverterDelegate<T>(T::class, this, key, default)
 
-internal fun JsonObject.byString(key: String? = null) = JsonPropertyDelegate(this, key, "") { it.asString }
-internal fun JsonObject.byUUID(key: String? = null) = JsonPropertyDelegate(this, key, UUID.randomUUID()) { it.asString.toUUID() }
-internal fun JsonObject.byInt(key: String? = null) = JsonPropertyDelegate(this, key, 0) { it.asInt }
-internal fun JsonObject.byFloat(key: String? = null) = JsonPropertyDelegate(this, key, 0f) { it.asFloat }
-internal fun JsonObject.byDouble(key: String? = null) = JsonPropertyDelegate(this, key, 0.0) { it.asDouble }
-internal fun JsonObject.byBoolean(key: String? = null) = JsonPropertyDelegate(this, key, false) { it.asBoolean }
-internal fun JsonObject.byLong(key: String? = null) = JsonPropertyDelegate(this, key, 0L) { it.asLong }
-internal fun JsonObject.byDate(key: String? = null) = JsonPropertyDelegate(this, key, Date(0L)) { Date(it.asLong) }
+internal fun JsonObject.byString(key: String? = null, default: String = "") = JsonPropertyDelegate(this, key, default) { it.asString }
+internal fun JsonObject.byUUID(key: String? = null, default: UUID = UUID.randomUUID()) = JsonPropertyDelegate(this, key, default) { it.asString.toUUID() }
+internal fun JsonObject.byInt(key: String? = null, default: Int = 0) = JsonPropertyDelegate(this, key, default) { it.asInt }
+internal fun JsonObject.byFloat(key: String? = null, default: Float = 0f) = JsonPropertyDelegate(this, key, default) { it.asFloat }
+internal fun JsonObject.byDouble(key: String? = null, default: Double = 0.0) = JsonPropertyDelegate(this, key, default) { it.asDouble }
+internal fun JsonObject.byBoolean(key: String? = null, default: Boolean = false) = JsonPropertyDelegate(this, key, default) { it.asBoolean }
+internal fun JsonObject.byLong(key: String? = null, default: Long = 0L) = JsonPropertyDelegate(this, key, default) { it.asLong }
+internal fun JsonObject.byDate(key: String? = null, default: Date = Date(0L)) = JsonPropertyDelegate(this, key, default) { Date(it.asLong) }
 
-internal inline fun <reified T> JsonObject.byExternalList(key: String? = null) = JsonPropertyDelegate(this, key, listOf()) {
+internal inline fun <reified T> JsonObject.byExternalList(key: String? = null, default: List<T> = emptyList()) = JsonPropertyDelegate(this, key, default) {
     it.asJsonArray.map { element ->
         val constructor: Constructor<*> = T::class.java.getConstructor(JsonObject::class.java)
             ?: error("External lists's generics must have a proper constructor")
@@ -56,13 +56,13 @@ internal inline fun <reified T> JsonObject.byExternalList(key: String? = null) =
     }.toList()
 }
 
-internal inline fun <reified T : Any> JsonObject.byList(key: String? = null) = JsonPropertyDelegate(this, key, listOf()) {
+internal inline fun <reified T : Any> JsonObject.byList(key: String? = null, default: List<T> = emptyList()) = JsonPropertyDelegate(this, key, default) {
     it.asJsonArray.map { element ->
         element.getWithGeneric(T::class)
     }.toList()
 }
 
-internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null, crossinline isValid: (Map.Entry<String, JsonElement>) -> Boolean = { true }) = JsonPropertyDelegate(this, key, mapOf()) {
+internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null, default: Map<String, T> = emptyMap(), crossinline isValid: (Map.Entry<String, JsonElement>) -> Boolean = { true }) = JsonPropertyDelegate(this, key, default) {
     val map = mutableMapOf<String, T>()
     val constructor: Constructor<*> = T::class.java.getConstructor(JsonObject::class.java)
         ?: error("External map's generics must have a proper constructor")
@@ -72,20 +72,20 @@ internal inline fun <reified T> JsonObject.byExternalMap(key: String? = null, cr
     map.toMap()
 }
 
-internal inline fun <reified T : Any> JsonObject.byMap(key: String? = null) = JsonPropertyDelegate(this, key, mapOf()) { element ->
+internal inline fun <reified T : Any> JsonObject.byMap(key: String? = null, default: Map<String, T> = emptyMap()) = JsonPropertyDelegate(this, key, default) { element ->
     element.asJsonObject.entrySet().associate {
         it.key to it.value.getWithGeneric(T::class)
     }
 }
 
-internal inline fun <reified K : Any, reified V : Any> JsonObject.byMapKeyed(key: String? = null) = JsonPropertyDelegate(this, key, mapOf()) { element ->
+internal inline fun <reified K : Any, reified V : Any> JsonObject.byMapKeyed(key: String? = null, default: Map<K, V> = emptyMap()) = JsonPropertyDelegate(this, key, default) { element ->
     element.asJsonObject.entrySet().associate {
         it.key.getWithGeneric(K::class) to it.value.getWithGeneric(V::class)
     }
 }
 
-internal fun <T : Enum<T>> JsonObject.byEnum(key: String? = null, klazz: KClass<out Enum<T>>) =
-    JsonPropertyDelegate(this, key, klazz.java.enumConstants[0] as T) { j -> klazz.java.enumConstants.find { it.name.equals(j.asString, true) } as T}
+internal fun <T : Enum<T>> JsonObject.byEnum(key: String? = null, klazz: KClass<out Enum<T>>, default: T = klazz.java.enumConstants[0] as T) =
+    JsonPropertyDelegate(this, key, default) { j -> klazz.java.enumConstants.find { it.name.equals(j.asString, true) } as T}
 
 @Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
 class JsonPropertyDelegate<T>(
@@ -98,7 +98,7 @@ class JsonPropertyDelegate<T>(
     operator fun getValue(thisRef: Any?, prop: KProperty<*>): T {
         if (value != null) return value as T
         val trueKey = key ?: prop.name
-        if ((!json.has(trueKey) && prop.returnType.isMarkedNullable) || json.get(trueKey) == null || json.get(trueKey).isJsonNull) return default
+        if (json.get(trueKey) == null || json.get(trueKey).isJsonNull) return if (prop.returnType.isMarkedNullable) null as T else default
         val ret = lambda(json.get(trueKey))
         value = ret
         return ret
