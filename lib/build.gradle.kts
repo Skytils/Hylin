@@ -23,7 +23,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
 
     // Add ForgeGradle to get Minecraft Classes
-    id("net.minecraftforge.gradle.forge") version "6f5327"
+    id("net.minecraftforge.gradle.forge") version "41dfce0"
 
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
@@ -70,7 +70,6 @@ minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
     mappings = "stable_22"
-    isGitVersion = false
 }
 
 java {
