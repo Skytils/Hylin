@@ -19,6 +19,7 @@
 package skytils.hylin.skyblock
 
 import com.google.gson.JsonObject
+import skytils.hylin.extension.converter.byBoolean
 import skytils.hylin.extension.converter.byExternal
 import skytils.hylin.extension.converter.byExternalMap
 import skytils.hylin.extension.converter.byString
@@ -36,9 +37,10 @@ class Profile(json: JsonObject) {
     val id: String by json.byString("profile_id")
     val cuteName: String by json.byString("cute_name")
     val members by json.byExternalMap<Member> {
-        it.value.asJsonObject.has("last_save")
+        it.value.asJsonObject.get("coop_invitation").asJsonObject.get("confirmed").asBoolean
     }
     val banking: Banking? by json.byExternal<Banking>()
+    val selected: Boolean by json.byBoolean()
 
     inline fun scan(crossinline iterator: (uuid: UUID, member: Member, inv: Inventory, item: InventoryItem) -> Unit) {
         members.forEach { (uuid, member) ->

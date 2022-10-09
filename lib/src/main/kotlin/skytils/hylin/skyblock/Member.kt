@@ -26,6 +26,7 @@ import skytils.hylin.skyblock.item.Inventory
 import skytils.hylin.skyblock.mining.HOTM
 import skytils.hylin.skyblock.misc.Griffin
 import skytils.hylin.skyblock.slayer.Slayers
+import java.util.Date
 
 /**
  * Represents a Hypixel Skyblock member
@@ -33,7 +34,8 @@ import skytils.hylin.skyblock.slayer.Slayers
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class Member(val json: JsonObject) {
-    val lastSave by json.byDate("last_save")
+    @Deprecated("No longer exists in API", ReplaceWith("Member.selected"),level = DeprecationLevel.HIDDEN)
+    val lastSave = Date(0L)
     val stats: Map<String, Int>? by json.byMap()
     val collection: Map<String, Int>? by json.byMap()
     val objectives by json.byExternalMap<SkyblockObjective>()
@@ -82,7 +84,6 @@ class Member(val json: JsonObject) {
 
     override fun toString(): String {
         return "Member(\n" +
-                "\tlastSave=$lastSave, \n" +
                 "\tstats=$stats, \n" +
                 "\tcollection=$collection, \n" +
                 "\tobjectives=$objectives, \n" +

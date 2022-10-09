@@ -21,6 +21,7 @@ package skytils.hylin.extension
 import skytils.hylin.skyblock.Profile
 import java.util.*
 
-fun List<Profile>.getLatestSkyblockProfile(uuid: UUID) = this.maxByOrNull {
-    it.members[uuid.nonDashedString()]?.lastSave?.time ?: 0L
-}
+@Deprecated("No longer uses save time", ReplaceWith("List<Profile>.getSelectedSkyblockProfile(uuid: UUID)"),level = DeprecationLevel.HIDDEN)
+fun List<Profile>.getLatestSkyblockProfile(uuid: UUID) = this.firstOrNull(Profile::selected)
+
+fun List<Profile>.getSelectedSkyblockProfile(uuid: UUID) = this.firstOrNull(Profile::selected)

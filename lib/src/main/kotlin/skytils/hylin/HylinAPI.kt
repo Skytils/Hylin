@@ -281,8 +281,8 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
      * @return The latest played skyblock profile
      */
     fun getLatestSkyblockProfileSync(uuid: UUID): Profile? {
-        return getSkyblockProfilesSync(uuid).maxByOrNull {
-            it.members[uuid.nonDashedString()]?.lastSave?.time ?: 0L
+        return getSkyblockProfilesSync(uuid).firstOrNull {
+            it.selected
         }
     }
 
