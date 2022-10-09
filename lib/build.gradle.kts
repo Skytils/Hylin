@@ -1,7 +1,8 @@
 plugins {
     java
-    kotlin("jvm") version "1.7.10"
     id("maven-publish")
+    kotlin("jvm") version "1.6.21"
+    kotlin("plugin.serialization") version "1.6.21"
 }
 
 publishing {
@@ -21,6 +22,12 @@ repositories {
     maven { url = uri("https://jitpack.io/") }
 }
 
+dependencies {
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+}
+
 tasks {
     compileJava {
         options.encoding = "UTF-8"
@@ -28,6 +35,7 @@ tasks {
     compileKotlin {
         kotlinOptions {
             jvmTarget = "1.8"
+            freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
         }
     }
 }
