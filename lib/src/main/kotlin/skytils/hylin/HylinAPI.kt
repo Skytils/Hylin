@@ -241,8 +241,10 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
      */
     fun getSkyblockProfilesSync(uuid: UUID): List<Profile> {
         val profiles =
-            connectionHandler.hypixelJSON("$endpoint/skyblock/profiles?key=$key&uuid=$uuid")
-                .getArray("profiles")
+            connectionHandler.hypixelJSON("$endpoint/skyblock/profiles?key=$key&uuid=$uuid")["profiles"]
+                .takeUnless { it.isJsonNull }
+                ?.asJsonArray
+                ?: return emptyList()
         return profiles.map { Profile(it.asJsonObject) }
     }
 
