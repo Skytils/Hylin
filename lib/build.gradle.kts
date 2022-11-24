@@ -20,10 +20,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.5.21"
+    id("org.jetbrains.kotlin.jvm") version "1.7.21"
 
     // Add ForgeGradle to get Minecraft Classes
-    id("net.minecraftforge.gradle.forge") version "41dfce0"
+    id("net.minecraftforge.gradle.forge") version "41dfce0a70"
 
     // Apply the java-library plugin for API and implementation separation.
     id("java-library")
@@ -63,7 +63,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 }
 
 minecraft {
