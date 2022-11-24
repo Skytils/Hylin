@@ -37,7 +37,7 @@ class Profile(json: JsonObject) {
     val id: String by json.byString("profile_id")
     val cuteName: String by json.byString("cute_name")
     val members by json.byExternalMap<Member> {
-        it.value.asJsonObject.get("coop_invitation").asJsonObject.get("confirmed").asBoolean
+        it.value.asJsonObject.has("first_join")
     }
     val banking: Banking? by json.byExternal<Banking>()
     val selected: Boolean by json.byBoolean()
