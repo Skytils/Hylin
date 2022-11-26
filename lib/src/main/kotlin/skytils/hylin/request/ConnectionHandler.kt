@@ -35,6 +35,7 @@ import skytils.hylin.extension.getString
 class ConnectionHandler {
 
     val parser = JsonParser()
+    val client = HttpClients.createDefault()
 
     /**
      * Reads an endpoint and parses as JSON
@@ -44,7 +45,7 @@ class ConnectionHandler {
      */
     fun readJSON(endpoint: String): JsonObject {
         try {
-            return parser.parse(HttpClients.createDefault().use {
+            return parser.parse(client.let {
                 HttpGet(endpoint).run {
                     addHeader("User-Agent", "Hylin/1.0.0")
                     it.execute(this)
