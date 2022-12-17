@@ -8,7 +8,8 @@ import java.util.UUID
 
 @Serializable
 class PlayerResponse (
-    override val success: Boolean
+    override val success: Boolean,
+    val player: Player
 ): HypixelResponse()
 
 @Serializable
