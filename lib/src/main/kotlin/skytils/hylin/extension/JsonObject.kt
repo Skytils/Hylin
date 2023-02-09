@@ -24,6 +24,7 @@ import com.google.gson.JsonObject
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 /**
@@ -63,7 +64,7 @@ fun <T : Any> JsonElement.getWithGeneric(clazz: KClass<out T>): T {
         Date::class -> Date(asLong) as T
         UUID::class -> asString.toUUID() as T
         JsonObject::class -> asJsonObject as T
-        Duration::class -> Duration.milliseconds(asLong) as T
+        Duration::class -> asLong.milliseconds as T
         else -> error("Invalid generic")
     }
 }
