@@ -39,7 +39,7 @@ import java.util.*
  *
  * @param key A Hypixel API key
  */
-class HylinAPI private constructor(var key: String, private val cacheNames: Boolean = true, val scope: CoroutineScope = CoroutineScope(Dispatchers.IO), var endpoint: String = "https://api.hypixel.net") {
+class HylinAPI private constructor(var key: String, private val cacheNames: Boolean = true, val scope: CoroutineScope = CoroutineScope(Dispatchers.IO), var endpoint: String = "https://api.hypixel.net", var userAgent: String = "Hylin/1.0.0") {
 
     companion object {
 
@@ -61,7 +61,7 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
         fun createHylinAPI(key: String, cacheNames: Boolean = true): HylinAPI = HylinAPI(key, cacheNames)
     }
 
-    internal val connectionHandler = ConnectionHandler()
+    internal val connectionHandler = ConnectionHandler(this)
     internal val namesToUUIDs = hashMapOf<String, UUID>()
     internal val UUIDsToNames = hashMapOf<UUID, String>()
 

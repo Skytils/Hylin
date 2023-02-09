@@ -91,7 +91,7 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "1.8"
-            freeCompilerArgs += setOf("-Xopt-in=kotlin.RequiresOptIn")
+            freeCompilerArgs += setOf("-Xmx2G")
         }
     }
 }

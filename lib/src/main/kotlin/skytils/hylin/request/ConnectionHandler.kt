@@ -25,6 +25,7 @@ import com.google.gson.JsonSyntaxException
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
+import skytils.hylin.HylinAPI
 import skytils.hylin.extension.getBoolean
 import skytils.hylin.extension.getString
 
@@ -32,7 +33,7 @@ import skytils.hylin.extension.getString
 /**
  * Handler for API connections and reading JSON
  */
-class ConnectionHandler {
+class ConnectionHandler(private val api: HylinAPI) {
 
     val parser = JsonParser()
     val client = HttpClients.createDefault()
@@ -47,7 +48,7 @@ class ConnectionHandler {
         try {
             return parser.parse(client.let {
                 HttpGet(endpoint).run {
-                    addHeader("User-Agent", "Hylin/1.0.0")
+                    addHeader("User-Agent", api.userAgent)
                     it.execute(this)
                 }.use {
                     EntityUtils.toString(it.entity, Charsets.UTF_8).apply {
