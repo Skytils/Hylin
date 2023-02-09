@@ -28,6 +28,7 @@ import skytils.hylin.player.OnlineStatus
 import skytils.hylin.player.Player
 import skytils.hylin.request.AsyncRequest
 import skytils.hylin.request.ConnectionHandler
+import skytils.hylin.request.ConnectionHandlerImpl
 import skytils.hylin.skyblock.Member
 import skytils.hylin.skyblock.Profile
 import skytils.hylin.skyblock.bazaar.BazaarData
@@ -39,7 +40,14 @@ import java.util.*
  *
  * @param key A Hypixel API key
  */
-class HylinAPI private constructor(var key: String, private val cacheNames: Boolean = true, val scope: CoroutineScope = CoroutineScope(Dispatchers.IO), var endpoint: String = "https://api.hypixel.net", var userAgent: String = "Hylin/1.0.0") {
+class HylinAPI(
+    var key: String,
+    private val cacheNames: Boolean = true,
+    val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+    connectionHandler: ConnectionHandler? = null,
+    var endpoint: String = "https://api.hypixel.net",
+    var userAgent: String = "Hylin/1.1.0"
+) {
 
     companion object {
 
@@ -51,17 +59,10 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
          */
         fun CoroutineScope.createHylinAPI(key: String, cacheNames: Boolean = true): HylinAPI =
             HylinAPI(key, cacheNames, this)
-
-        /**
-         * Function for creating a new Hylin API
-         * @param key A Hypixel API key
-         * @param cacheNames Whether or not to cache username to UUID conversions
-         * @return A HypixelAPI instance
-         */
-        fun createHylinAPI(key: String, cacheNames: Boolean = true): HylinAPI = HylinAPI(key, cacheNames)
     }
 
-    internal val connectionHandler = ConnectionHandler(this)
+
+    internal val connectionHandler = connectionHandler ?: ConnectionHandlerImpl(this)
     internal val namesToUUIDs = hashMapOf<String, UUID>()
     internal val UUIDsToNames = hashMapOf<UUID, String>()
 

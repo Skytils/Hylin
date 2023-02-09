@@ -1,6 +1,6 @@
 /*
  * Hylin - Hypixel API Wrapper in Kotlin
- * Copyright (C) 2021  Skytils
+ * Copyright (C) 2023  Skytils
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -19,56 +19,16 @@
 package skytils.hylin.request
 
 import com.google.gson.JsonObject
-import com.google.gson.JsonParseException
-import com.google.gson.JsonParser
-import com.google.gson.JsonSyntaxException
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.HttpClients
-import org.apache.http.util.EntityUtils
 import skytils.hylin.HylinAPI
-import skytils.hylin.extension.getBoolean
-import skytils.hylin.extension.getString
 
-
-/**
- * Handler for API connections and reading JSON
- */
-class ConnectionHandler(private val api: HylinAPI) {
-
-    val parser = JsonParser()
-    val client = HttpClients.createDefault()
-
+abstract class ConnectionHandler(protected val api: HylinAPI) {
     /**
      * Reads an endpoint and parses as JSON
      *
      * @param endpoint Endpoint relative to the Hypixel API
      * @return A JsonObject of the parsed result
      */
-    fun readJSON(endpoint: String): JsonObject {
-        try {
-            return parser.parse(client.let {
-                HttpGet(endpoint).run {
-                    addHeader("User-Agent", api.userAgent)
-                    it.execute(this)
-                }.use {
-                    EntityUtils.toString(it.entity, Charsets.UTF_8).apply {
-                        EntityUtils.consume(it.entity)
-                    }
-                }
-            }).asJsonObject
-        } catch (e: JsonParseException) {
-            error("Error caught during JSON parsing from \"$endpoint\"")
-        } catch (e: JsonSyntaxException) {
-            error("Error caught in JSON syntax from \"$endpoint\"")
-        }
-    }
+    abstract fun readJSON(endpoint: String): JsonObject
 
-    fun hypixelJSON(endpoint: String): JsonObject {
-        val readJSON = readJSON(endpoint)
-        if (!readJSON.getBoolean("success")) {
-            throw HypixelAPIException(endpoint, readJSON.getString("cause"))
-        }
-        return readJSON
-    }
-
+    abstract fun hypixelJSON(endpoint: String): JsonObject
 }
