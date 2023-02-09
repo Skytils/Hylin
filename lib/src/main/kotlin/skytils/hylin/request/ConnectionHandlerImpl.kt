@@ -33,7 +33,7 @@ import skytils.hylin.extension.getString
 /**
  * Handler for API connections and reading JSON
  */
-class ConnectionHandlerImpl(api: HylinAPI) : ConnectionHandler(api) {
+class ConnectionHandlerImpl(private val api: HylinAPI) : ConnectionHandler() {
 
     val parser = JsonParser()
     val client = HttpClients.createDefault()

@@ -19,9 +19,8 @@
 package skytils.hylin.request
 
 import com.google.gson.JsonObject
-import skytils.hylin.HylinAPI
 
-abstract class ConnectionHandler(protected val api: HylinAPI) {
+abstract class ConnectionHandler {
     /**
      * Reads an endpoint and parses as JSON
      *
