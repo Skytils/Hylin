@@ -39,7 +39,7 @@ import java.util.*
  *
  * @param key A Hypixel API key
  */
-class HylinAPI private constructor(var key: String, private val cacheNames: Boolean = true, val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)) {
+class HylinAPI private constructor(var key: String, private val cacheNames: Boolean = true, val scope: CoroutineScope = CoroutineScope(Dispatchers.IO), var endpoint: String = "https://api.hypixel.net") {
 
     companion object {
 
@@ -59,8 +59,6 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
          * @return A HypixelAPI instance
          */
         fun createHylinAPI(key: String, cacheNames: Boolean = true): HylinAPI = HylinAPI(key, cacheNames)
-
-        const val endpoint = "https://api.hypixel.net"
     }
 
     internal val connectionHandler = ConnectionHandler()
@@ -101,7 +99,7 @@ class HylinAPI private constructor(var key: String, private val cacheNames: Bool
 
 
     /**
-     * Get a players username with their UUID via ELectroid's API synchronously
+     * Get a players username with their UUID via Mojang's API asynchronously
      *
      * @param uuid The player's UUID
      * @return The player's username
